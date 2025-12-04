@@ -22,6 +22,16 @@ import java.util.List;
 
 @Path("/products")
 public class ProductController {
+    @Path("/single-product")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    // Fetch product id from request
+    // .../single-product?productId=1
+    public Response loadSingleProduct(@QueryParam("productId") int id) {
+        String responseJson = new ProductService().getSingleProduct(id);
+        return Response.ok().entity(responseJson).build();
+    }
+
 
     @Path("/all")
     @GET
