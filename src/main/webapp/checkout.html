@@ -1,0 +1,264 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Smart Trade</title>
+        <meta name="robots" content="noindex, follow" />
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/images/favicon.png">
+
+        <!-- CSS
+        ============================================ -->
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/css/vendor/bootstrap.min.css">
+        <link rel="stylesheet" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/css/vendor/font-awesome.css">
+        <link rel="stylesheet" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/css/vendor/flaticon/flaticon.css">
+        <link rel="stylesheet" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/css/vendor/slick.css">
+        <link rel="stylesheet" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/css/vendor/slick-theme.css">
+        <link rel="stylesheet" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/css/vendor/jquery-ui.min.css">
+        <link rel="stylesheet" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/css/vendor/sal.css">
+        <link rel="stylesheet" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/css/vendor/magnific-popup.css">
+        <link rel="stylesheet" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/css/vendor/base.css">
+        <link rel="stylesheet" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/css/style.min.css">
+
+        <link rel="stylesheet" href="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/css/notification.css">
+
+    </head>
+
+
+    <body class="sticky-header">
+        <!--[if lte IE 9]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+    <![endif]-->
+        <a href="#top" class="back-to-top" id="backto-top"><i class="fal fa-arrow-up"></i></a>
+        <!-- Start Header -->
+        <header class="header axil-header header-style-1">
+
+        </header>
+        <!-- End Header -->
+
+        <main class="main-wrapper">
+
+            <!-- Start Checkout Area  -->
+            <div class="axil-checkout-area axil-section-gap">
+                <div class="container">
+                    <form action="#">
+                        <div class="row">
+                            <div class="col-lg-6">
+
+                                <div class="axil-checkout-billing">
+                                    <h4 class="title mb--40">Shipping Details</h4>
+
+                                    <div class="form-group input-group">
+                                        <input type="checkbox" id="checkbox1">
+                                        <label for="checkbox1">Same as your current address?</label>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>First Name <span>*</span></label>
+                                                <input type="text" id="first-name">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Last Name <span>*</span></label>
+                                                <input type="text" id="last-name">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>City <span>*</span></label>
+                                        <select id="city-select">
+                                            <option value="0">Select</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address Line 1 <span>*</span></label>
+                                        <input type="text" id="line-one" placeholder="House number and street name">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Address Line 2 <span>*</span></label>
+                                        <input type="text" id="line-two" placeholder="Apartment, suite, unit, etc.">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Postal Code <span>*</span></label>
+                                        <input type="text" id="postal-code">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Mobile <span>*</span></label>
+                                        <input type="text" id="mobile">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="axil-order-summery order-checkout-summery">
+                                    <h5 class="title mb--20">Your Order</h5>
+                                    <div class="summery-table-wrap">
+                                        <table class="table summery-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th>Subtotal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="st-tbody">
+
+                                                <tr class="order-product" id="st-item-tr">
+                                                    <td>
+                                                        <span id="st-product-title">Product-1</span> x 
+                                                        <span class="quantity" id="st-product-qty">1</span>
+                                                    </td>
+                                                    <td>Rs. <span id="st-product-price"></span></td>
+                                                </tr>
+
+                                                <tr class="order-subtotal" id="st-subtotal-tr">
+                                                    <td>Subtotal</td>
+                                                    <td>Rs. 
+                                                        <span id="st-product-total-amount"></span></td>
+                                                </tr>
+
+                                                <tr class="order-shipping" id="st-order-shipping-tr">
+                                                    <td colspan="2">
+                                                        <div class="shipping-amount">
+                                                            <span class="title">Shipping Charges</span>
+                                                            <span class="amount">Rs. 
+                                                                <span id="st-product-shipping-charges">1,000.00</span>
+                                                            </span>
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="order-total" id="st-order-total-tr">
+                                                    <td>Total</td>
+                                                    <td class="order-total-amount">Rs. 
+                                                        <span id="st-order-total-amount">251,000.00</span></td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="order-payment-method">
+
+                                        <div class="single-payment">
+                                            <div class="input-group justify-content-between align-items-center">
+                                                <input type="radio" id="radio6" name="payment" checked>
+                                                <label for="radio6">Visa/Master Card</label>
+                                                <div>
+                                                    <img src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/images/icons/visa.png" >
+                                                    <img src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/images/icons/mastercard.png" >
+                                                </div>
+                                            </div>
+                                            <p>You can pay with your credit or debit card.</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="axil-btn btn-bg-primary checkout-btn" onclick="checkout();">Process to Checkout</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- End Checkout Area  -->
+
+        </main>
+
+
+        <div class="service-area">
+            <div class="container">
+                <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
+                    <div class="col">
+                        <div class="service-box service-style-2">
+                            <div class="icon">
+                                <img src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/images/icons/service1.png" alt="Service">
+                            </div>
+                            <div class="content">
+                                <h6 class="title">Fast &amp; Secure Delivery</h6>
+                                <p>Tell about your service.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="service-box service-style-2">
+                            <div class="icon">
+                                <img src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/images/icons/service2.png" alt="Service">
+                            </div>
+                            <div class="content">
+                                <h6 class="title">Money Back Guarantee</h6>
+                                <p>Within 10 days.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="service-box service-style-2">
+                            <div class="icon">
+                                <img src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/images/icons/service3.png" alt="Service">
+                            </div>
+                            <div class="content">
+                                <h6 class="title">24 Hour Return Policy</h6>
+                                <p>No question ask.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="service-box service-style-2">
+                            <div class="icon">
+                                <img src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/images/icons/service4.png" alt="Service">
+                            </div>
+                            <div class="content">
+                                <h6 class="title">Pro Quality Support</h6>
+                                <p>24/7 Live support.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Footer Area  -->
+        <footer class="axil-footer-area footer-style-2">
+
+        </footer>
+
+        <!-- JS
+    ============================================ -->
+        <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
+        <!-- Modernizer JS -->
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/modernizr.min.js"></script>
+        <!-- jQuery JS -->
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/jquery.js"></script>
+        <!-- Bootstrap JS -->
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/popper.min.js"></script>
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/bootstrap.min.js"></script>
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/slick.min.js"></script>
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/js.cookie.js"></script>
+        <!-- <script src="assets/js/vendor/jquery.style.switcher.js"></script> -->
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/jquery-ui.min.js"></script>
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/jquery.ui.touch-punch.min.js"></script>
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/jquery.countdown.min.js"></script>
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/sal.js"></script>
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/jquery.magnific-popup.min.js"></script>
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/imagesloaded.pkgd.min.js"></script>
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/isotope.pkgd.min.js"></script>
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/counterup.js"></script>
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/vendor/waypoints.min.js"></script>
+
+        <!-- Main JS -->
+        <script src="../../../../../../../OneDrive/Documents/NetBeansProjects/WEB/Smarttrade/web/assets/js/main.js"></script>
+        <script src="assets/js/notification.js"></script>
+
+
+    </body>
+
+</html>
