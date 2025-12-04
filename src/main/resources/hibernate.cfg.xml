@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/smarttrade?useSSL=false&amp;allowPublicKeyRetrieval=true</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">050201@Dilhara</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.show_sql">true</property>
+
+        <mapping class="lk.jiat.smarttrade.entity.City"/>
+        <mapping class="lk.jiat.smarttrade.entity.Address"/>
+        <mapping class="lk.jiat.smarttrade.entity.Status"/>
+        <mapping class="lk.jiat.smarttrade.entity.Seller"/>
+        <mapping class="lk.jiat.smarttrade.entity.User"/>
+        <mapping class="lk.jiat.smarttrade.entity.Brand"/>
+        <mapping class="lk.jiat.smarttrade.entity.Model"/>
+        <mapping class="lk.jiat.smarttrade.entity.Color"/>
+        <mapping class="lk.jiat.smarttrade.entity.Storage"/>
+        <mapping class="lk.jiat.smarttrade.entity.Quality"/>
+        <mapping class="lk.jiat.smarttrade.entity.Product"/>
+        <mapping class="lk.jiat.smarttrade.entity.DeliveryType"/>
+        <mapping class="lk.jiat.smarttrade.entity.Order"/>
+        <mapping class="lk.jiat.smarttrade.entity.OrderItem"/>
+        <mapping class="lk.jiat.smarttrade.entity.Discount"/>
+        <mapping class="lk.jiat.smarttrade.entity.Stock"/>
+        <mapping class="lk.jiat.smarttrade.entity.Cart"/>
+
+    </session-factory>
+</hibernate-configuration>

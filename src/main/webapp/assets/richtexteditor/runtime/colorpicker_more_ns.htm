@@ -1,0 +1,2613 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Page-Enter" content="blendTrans(Duration=0.1)" />
+	<meta http-equiv="Page-Exit" content="blendTrans(Duration=0.1)" />
+
+	<script type="text/javascript">
+		function updateColor(c) {
+			parent.rtecolorpicker.update(c);
+		}
+		function selectColor(c) {
+			parent.rtecolorpicker.select(c);
+		}
+		function selectCancel() {
+			parent.rtecolorpicker.cancel();
+		}
+		function setCallback(cb) {
+			parent.rtecolorpicker.setCallback(cb);
+		}
+	</script>
+
+	<script type="text/javascript">
+
+		//alert("script load correctly v0.1");
+
+
+		/****************************************************************\
+			Cookie Functions
+		\****************************************************************/
+
+
+		function SetCookie(name, value, seconds) {
+			localStorage.setItem("rte-" + name, value);
+		}
+		function GetCookie(name) {
+			return localStorage.getItem("rte-" + name);
+		}
+		function GetCookieDictionary() {
+			var dict = {};
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var parts = cookies[i].split('=');
+				dict[parts[0].replace(/\s/g, '')] = unescape(parts[1]);
+			}
+			return dict;
+		}
+		function GetCookieArray() {
+			var arr = [];
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var parts = cookies[i].split('=');
+				var cookie = { name: parts[0].replace(/\s/g, ''), value: unescape(parts[1]) };
+				arr[arr.length] = cookie;
+			}
+			return arr;
+		}
+
+		var __defaultcustomlist = ["#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"];
+
+		function GetCustomColors() {
+			var customlist = __defaultcustomlist.concat();
+			for (var i = 0; i < 18; i++) {
+				var color = GetCustomColor(i);
+				if (color) customlist[i] = color;
+			}
+			return customlist;
+		}
+		function GetCustomColor(slot) {
+			return GetCookie("CECC" + slot);
+		}
+		function SetCustomColor(slot, color) {
+			SetCookie("CECC" + slot, color, 60 * 60 * 24 * 365);
+		}
+
+		var _origincolor = "";
+
+		document.onmouseover = function (event) {
+			event = window.event || event;
+			var t = event.srcElement || event.target;
+			if (t.className == "colordiv") {
+				firecolorchange(t.style.backgroundColor);
+			}
+		}
+		document.onmouseout = function (event) {
+			event = window.event || event;
+			var t = event.srcElement || event.target;
+			if (t.className == "colordiv") {
+				firecolorchange(_origincolor);
+			}
+		}
+		document.onclick = function (event) {
+			event = window.event || event;
+			var t = event.srcElement || event.target;
+			if (t.className == "colordiv") {
+				var showname = document.getElementById("CheckboxColorNames") && document.getElementById("CheckboxColorNames").checked;
+				if (showname) {
+					do_select(t.getAttribute("cname") || t.style.backgroundColor);
+				}
+				else {
+					do_select(t.getAttribute("cvalue") || t.style.backgroundColor);
+				}
+			}
+		}
+
+
+		var _editor;
+
+		function firecolorchange(change) {
+
+		}
+
+		if (top.dialogArguments) {
+			if (typeof (top.dialogArguments) == 'object') {
+				if (top.dialogArguments.onchange) {
+					firecolorchange = top.dialogArguments.onchange;
+					_origincolor = top.dialogArguments.color;
+					_editor = top.dialogArguments.editor;
+				}
+			}
+		}
+
+		var _selectedcolor = null;
+		function do_select(color) {
+			_selectedcolor = color;
+			firecolorchange(color);
+			var span = document.getElementById("divpreview");
+			if (span) span.value = color;
+		}
+		function do_saverecent(color) {
+			if (!color) return;
+			if (color.length != 7) return;
+			if (color.substring(0, 1) != "#") return;
+			var hex = color.substring(1, 7);
+			var recent = GetCookie("RecentColors");
+			console.log("load recent", recent);
+			if (!recent) recent = "";
+			if ((recent.length % 6) != 0) recent = "";
+			for (var i = 0; i < recent.length; i += 6) {
+				if (recent.substr(i, 6) == hex) {
+					recent = recent.substr(0, i) + recent.substr(i + 6);
+					i -= 6;
+				}
+			}
+			if (recent.length > 31 * 6)
+				recent = recent.substr(0, 31 * 6);
+			recent = hex + recent;
+			//alert(recent);
+			SetCookie("RecentColors", recent, 60 * 60 * 24 * 365);
+			console.log("save recent", recent);
+		}
+
+		setCallback(do_saverecent);
+
+		function do_insert() {
+			var color;
+			var divpreview = document.getElementById("divpreview");
+			if (divpreview)
+				color = divpreview.value;
+			else
+				color = _selectedcolor;
+			if (!color) return;
+			if (/^[0-9A-F]{6}$/ig.test(color)) {
+				color = "#" + color;
+			}
+			try {
+				document.createElement("SPAN").style.color = color;
+				do_saverecent(color);
+				selectColor(color);
+			}
+			catch (x) {
+				alert(x.message);
+				divpreview.value = "";
+				return false;
+			}
+		}
+
+		function do_Close() {
+			selectCancel();
+		}
+	</script>
+
+	<script type="text/javascript">
+		var POSITIONADJUSTX = 22;
+		var POSITIONADJUSTY = 52;
+		var POSITIONADJUSTZ = 48;
+
+		/*
+		 * -----------------------------------------------------
+		 * Author: Lewis E. Moten III
+		 * Date: May, 16, 2004
+		 * Homepage: http://www.lewismoten.com
+		 * Email: lewis@moten.com
+		 * -----------------------------------------------------
+		 * 
+		 * This code is Copyright (c) 2004 Lewis Moten, all rights reserved. 
+		 * In order to receive the right to license this code for use on your 
+		 * site the original code must be downloaded from lewismoten.com.
+		 * License is granted to user to reuse this code on their own Web
+		 * site if and only if this entire copyright notice is included. 
+		 * Code written by Lewis Moten.
+		 */
+
+
+		var ColorMode = 1;
+		var GradientPositionDark = new Boolean(false);
+		var frm = new Object();
+		var msg = new Object();
+		var _xmlDocs = new Array();
+		var _xmlIndex = -1;
+		var _xml = null;
+		LoadLanguage();
+
+		window.onload = window_load;
+
+		function initialize() {
+			frm.btnCancel.onclick = btnCancel_Click;
+			frm.btnOK.onclick = btnOK_Click;
+			frm.txtHSB_Hue.onkeyup = Hsb_Changed;
+			frm.txtHSB_Hue.onkeypress = validateNumber;
+			frm.txtHSB_Saturation.onkeyup = Hsb_Changed;
+			frm.txtHSB_Saturation.onkeypress = validateNumber;
+			frm.txtHSB_Brightness.onkeyup = Hsb_Changed;
+			frm.txtHSB_Brightness.onkeypress = validateNumber;
+			frm.txtRGB_Red.onkeyup = Rgb_Changed;
+			frm.txtRGB_Red.onkeypress = validateNumber;
+			frm.txtRGB_Green.onkeyup = Rgb_Changed;
+			frm.txtRGB_Green.onkeypress = validateNumber;
+			frm.txtRGB_Blue.onkeyup = Rgb_Changed;
+			frm.txtRGB_Blue.onkeypress = validateNumber;
+			frm.txtHex.onkeyup = Hex_Changed;
+			frm.txtHex.onkeypress = validateHex;
+			frm.btnWebSafeColor.onclick = btnWebSafeColor_Click;
+			frm.rdoHSB_Hue.onclick = rdoHsb_Hue_Click;
+			frm.rdoHSB_Saturation.onclick = rdoHsb_Saturation_Click;
+			frm.rdoHSB_Brightness.onclick = rdoHsb_Brightness_Click;
+
+			document.getElementById("pnlGradient_Top").onclick = pnlGradient_Top_Click;
+			document.getElementById("pnlGradient_Top").onmousemove = pnlGradient_Top_MouseMove;
+			document.getElementById("pnlGradient_Top").onmousedown = pnlGradient_Top_MouseDown;
+			document.getElementById("pnlGradient_Top").onmouseup = pnlGradient_Top_MouseUp;
+
+			document.getElementById("pnlVertical_Top").onclick = pnlVertical_Top_Click;
+			document.getElementById("pnlVertical_Top").onmousemove = pnlVertical_Top_MouseMove;
+			document.getElementById("pnlVertical_Top").onmousedown = pnlVertical_Top_MouseDown;
+			document.getElementById("pnlVertical_Top").onmouseup = pnlVertical_Top_MouseUp;
+			document.getElementById("pnlWebSafeColor").onclick = btnWebSafeColor_Click;
+			document.getElementById("pnlWebSafeColorBorder").onclick = btnWebSafeColor_Click;
+			document.getElementById("pnlOldColor").onclick = pnlOldClick_Click;
+
+			document.getElementById("lblHSB_Hue").onclick = rdoHsb_Hue_Click;
+			document.getElementById("lblHSB_Saturation").onclick = rdoHsb_Saturation_Click;
+			document.getElementById("lblHSB_Brightness").onclick = rdoHsb_Brightness_Click;
+
+			frm.txtHSB_Hue.focus();
+			window.focus();
+		}
+		function formatString(format) {
+			format = new String(format);
+			for (var i = 1; i < arguments.length; i++)
+				format = format.replace(new RegExp("\\{" + (i - 1) + "\\}"), arguments[i]);
+			return format;
+		}
+		function AddValue(o, value) {
+			value = new String(value).toLowerCase();
+			for (var i = 0; i < o.length; i++)
+				if (o[i] == value) return;
+			o[o.length] = value;
+		}
+		function SniffLanguage(l) {
+
+		}
+		function LoadNextLanguage() {
+
+		}
+		function LoadLanguage() {
+			// set default language (en-us)
+			msg.BadNumber = "A number between {0} and {1} is required. Closest value inserted.";
+			msg.Title = "Color Picker";
+			msg.SelectAColor = "Select a color:";
+			msg.OKButton = "OK";
+			msg.CancelButton = "Cancel";
+			msg.Recent = "Recent";
+			msg.WebSafeWarning = "Warning: not a web safe color";
+			msg.WebSafeClick = "Click to select web safe color";
+			msg.HsbHue = "H:";
+			msg.HsbHueTooltip = "Hue";
+			msg.HsbHueUnit = "%";
+			msg.HsbSaturation = "S:";
+			msg.HsbSaturationTooltip = "Saturation";
+			msg.HsbSaturationUnit = "%";
+			msg.HsbBrightness = "B:";
+			msg.HsbBrightnessTooltip = "Brightness";
+			msg.HsbBrightnessUnit = "%";
+			msg.RgbRed = "R:";
+			msg.RgbRedTooltip = "Red";
+			msg.RgbGreen = "G:";
+			msg.RgbGreenTooltip = "Green";
+			msg.RgbBlue = "B:";
+			msg.RgbBlueTooltip = "Blue";
+			msg.Hex = "#";
+			msg.RecentTooltip = "Recent:";
+
+		}
+		function AssignLanguage() {
+
+		}
+		function localize() {
+			SetHTML(
+				document.getElementById("lblSelectColorMessage"), msg.SelectAColor,
+				document.getElementById("lblRecent"), msg.Recent,
+				document.getElementById("lblHSB_Hue"), msg.HsbHue,
+				document.getElementById("lblHSB_Saturation"), msg.HsbSaturation,
+				document.getElementById("lblHSB_Brightness"), msg.HsbBrightness,
+				document.getElementById("lblRGB_Red"), msg.RgbRed,
+				document.getElementById("lblRGB_Green"), msg.RgbGreen,
+				document.getElementById("lblRGB_Blue"), msg.RgbBlue,
+				document.getElementById("lblHex"), msg.Hex,
+				document.getElementById("lblUnitHSB_Hue"), msg.HsbHueUnit,
+				document.getElementById("lblUnitHSB_Saturation"), msg.HsbSaturationUnit,
+				document.getElementById("lblUnitHSB_Brightness"), msg.HsbBrightnessUnit
+			);
+			SetValue(
+				frm.btnCancel, msg.CancelButton,
+				frm.btnOK, msg.OKButton
+			);
+			SetTitle(
+				frm.btnWebSafeColor, msg.WebSafeWarning,
+				document.getElementById("pnlWebSafeColor"), msg.WebSafeClick,
+				document.getElementById("pnlHSB_Hue"), msg.HsbHueTooltip,
+				document.getElementById("pnlHSB_Saturation"), msg.HsbSaturationTooltip,
+				document.getElementById("pnlHSB_Brightness"), msg.HsbBrightnessTooltip,
+				document.getElementById("pnlRGB_Red"), msg.RgbRedTooltip,
+				document.getElementById("pnlRGB_Green"), msg.RgbGreenTooltip,
+				document.getElementById("pnlRGB_Blue"), msg.RgbBlueTooltip
+			);
+
+		}
+		function window_load(e) {
+			frm = document.getElementById("frmColorPicker");
+			localize();
+			initialize();
+
+			var hex = GetQuery("Color").toUpperCase();
+			if (hex == "") hex = "FFFFFF";
+			if (hex.length == 7) hex = hex.substr(1, 6);
+			frm.txtHex.value = hex;
+			Hex_Changed(e);
+			hex = Form_Get_Hex();
+			SetBg(document.getElementById("pnlOldColor"), hex);
+
+			frm.ColorType[new Number(GetCookie("ColorMode") || 0)].checked = true;
+			ColorMode_Changed(e);
+
+			var recent = GetCookie("RecentColors") || "";
+
+			var RecentTooltip = msg.RecentTooltip;
+			for (var i = 1; i < 33; i++)
+				if (recent.length / 6 >= i) {
+					hex = recent.substr((i - 1) * 6, 6);
+					var rgb = HexToRgb(hex);
+					var title = formatString(msg.RecentTooltip, hex, rgb[0], rgb[1], rgb[2]);
+					SetBg(document.getElementById("pnlRecent" + i), hex);
+					SetTitle(document.getElementById("pnlRecent" + i), title);
+					document.getElementById("pnlRecent" + i).onclick = pnlRecent_Click;
+				}
+				else
+					document.getElementById("pnlRecent" + i).style.border = "0px";
+			//Hide(document.all["pnlRecent" + i]);
+		}
+
+		function pnlRecent_Click(e) {
+			var color = e.target.style.backgroundColor;
+			if (color.indexOf("rgb") != -1) {
+				var rgb = new Array();
+				color = color.substr(color.indexOf("(") + 1);
+				color = color.substr(0, color.indexOf(")"));
+				rgb[0] = new Number(color.substr(0, color.indexOf(",")));
+				color = color.substr(color.indexOf(",") + 1);
+				rgb[1] = new Number(color.substr(0, color.indexOf(",")));
+				rgb[2] = new Number(color.substr(color.indexOf(",") + 1));
+				color = RgbToHex(rgb);
+			}
+			else {
+				color = color.substr(1, 6).toUpperCase();
+			}
+			frm.txtHex.value = color;
+			Hex_Changed(e);
+		}
+		function pnlOldClick_Click(e) {
+			frm.txtHex.value = document.getElementById("pnlOldColor").style.backgroundColor.substr(1, 6).toUpperCase();
+			Hex_Changed(e);
+		}
+		function rdoHsb_Hue_Click(e) {
+			frm.rdoHSB_Hue.checked = true;
+			ColorMode_Changed(e);
+		}
+		function rdoHsb_Saturation_Click(e) {
+			frm.rdoHSB_Saturation.checked = true;
+			ColorMode_Changed(e);
+		}
+		function rdoHsb_Brightness_Click(e) {
+			frm.rdoHSB_Brightness.checked = true;
+			ColorMode_Changed(e);
+		}
+		function Hide() {
+			for (var i = 0; i < arguments.length; i++)
+				if (arguments[i])
+					arguments[i].style.display = "none";
+		}
+		function Show() {
+			for (var i = 0; i < arguments.length; i++)
+				if (arguments[i])
+					arguments[i].style.display = "";
+		}
+		function SetValue() {
+			for (var i = 0; i < arguments.length; i += 2)
+				arguments[i].value = arguments[i + 1];
+		}
+		function SetTitle() {
+			for (var i = 0; i < arguments.length; i += 2)
+				arguments[i].title = arguments[i + 1];
+		}
+		function SetHTML() {
+			for (var i = 0; i < arguments.length; i += 2)
+				arguments[i].innerHTML = arguments[i + 1];
+		}
+		function SetBg() {
+			for (var i = 0; i < arguments.length; i += 2) {
+				if (arguments[i])
+					arguments[i].style.backgroundColor = "#" + arguments[i + 1];
+			}
+		}
+		function SetBgPosition() {
+			for (var i = 0; i < arguments.length; i += 3)
+				arguments[i].style.backgroundPosition = arguments[i + 1] + "px " + arguments[i + 2] + "px";
+		}
+		function ColorMode_Changed(e) {
+			for (var i = 0; i < 3; i++)
+				if (frm.ColorType[i].checked) ColorMode = i;
+			SetCookie("ColorMode", ColorMode, 60 * 60 * 24 * 365);
+
+			Hide(
+				document.getElementById("pnlGradientHsbHue_Hue"),
+				document.getElementById("pnlGradientHsbHue_Black"),
+				document.getElementById("pnlGradientHsbHue_White"),
+				document.getElementById("pnlVerticalHsbHue_Background"),
+				document.getElementById("pnlVerticalHsbSaturation_Hue"),
+				document.getElementById("pnlVerticalHsbSaturation_White"),
+				document.getElementById("pnlVerticalHsbBrightness_Hue"),
+				document.getElementById("pnlVerticalHsbBrightness_Black"),
+				document.getElementById("pnlVerticalRgb_Start"),
+				document.getElementById("pnlVerticalRgb_End"),
+				document.getElementById("pnlGradientRgb_Base"),
+				document.getElementById("pnlGradientRgb_Invert"),
+				document.getElementById("pnlGradientRgb_Overlay1"),
+				document.getElementById("pnlGradientRgb_Overlay2")
+			);
+
+			switch (ColorMode) {
+				case 0:
+					document.getElementById("imgGradient").src = "images/cpns_ColorSpace1.png";
+					Show(
+						document.getElementById("pnlGradientHsbHue_Hue"),
+						document.getElementById("pnlGradientHsbHue_Black"),
+						document.getElementById("pnlGradientHsbHue_White"),
+						document.getElementById("pnlVerticalHsbHue_Background")
+					);
+					Hsb_Changed(e);
+					break;
+				case 1:
+					document.getElementById("imgGradient").src = "images/cpns_ColorSpace2.png";
+					document.getElementById("pnlVerticalHsbSaturation_Hue").src = "images/cpns_Vertical1.png";
+					Show(
+						document.getElementById("pnlGradientHsbHue_Hue"),
+						document.getElementById("pnlVerticalHsbSaturation_Hue")
+					);
+					document.getElementById("pnlGradientHsbHue_Hue").style.backgroundColor = "#000000";
+					Hsb_Changed(e);
+					break;
+				case 2:
+					document.getElementById("imgGradient").src = "images/cpns_ColorSpace2.png";
+					document.getElementById("pnlVerticalHsbSaturation_Hue").src = "images/cpns_Vertical2.png";
+					Show(
+						document.getElementById("pnlGradientHsbHue_Hue"),
+						document.getElementById("pnlVerticalHsbSaturation_Hue")
+					);
+					document.getElementById("pnlGradientHsbHue_Hue").style.backgroundColor = "#ffffff";
+					Hsb_Changed(e);
+					break;
+				default:
+					break;
+			}
+		}
+		function btnWebSafeColor_Click(e) {
+			var rgb = HexToRgb(frm.txtHex.value);
+			rgb = RgbToWebSafeRgb(rgb);
+			frm.txtHex.value = RgbToHex(rgb);
+			Hex_Changed(e);
+		}
+		function checkWebSafe() {
+			var rgb = Form_Get_Rgb();
+			if (RgbIsWebSafe(rgb)) {
+				Hide(
+					frm.btnWebSafeColor,
+					document.getElementById("pnlWebSafeColor"),
+					document.getElementById("pnlWebSafeColorBorder")
+				);
+			}
+			else {
+				rgb = RgbToWebSafeRgb(rgb);
+				SetBg(document.getElementById("pnlWebSafeColor"), RgbToHex(rgb));
+				Show(
+					frm.btnWebSafeColor,
+					document.getElementById("pnlWebSafeColor"),
+					document.getElementById("pnlWebSafeColorBorder")
+				);
+			}
+		}
+		function validateNumber(e) {
+			var key = String.fromCharCode(e.which);
+			if (IgnoreKey(e)) return;
+			if ("01234567879".indexOf(key) != -1) return;
+			e.which = 0;
+		}
+		function validateHex(e) {
+			if (IgnoreKey(e)) return;
+			var key = String.fromCharCode(e.which);
+			if ("abcdef".indexOf(key) != -1) {
+				//e.which = key.toUpperCase().charCodeAt(0);
+				return;
+			}
+			if ("01234567879ABCDEF".indexOf(key) != -1) return;
+			//e.which = 0;	
+		}
+		function IgnoreKey(e) {
+			var key = String.fromCharCode(e.which);
+			var keys = new Array(0, 8, 9, 13, 27);
+			if (key == null) return true;
+			for (var i = 0; i < 5; i++)
+				if (e.which == keys[i]) return true;
+			return false;
+		}
+		function btnCancel_Click() {
+			selectCancel();
+		}
+		function btnOK_Click() {
+			var hex = "#"+ new String(frm.txtHex.value);
+			//alert(hex);
+			do_saverecent(hex);
+			selectColor(hex);
+		}
+		function SetGradientPosition(e) {
+			
+			var x = e.offsetX;
+			var y = e.offsetY;
+
+			if (e.type == "mousemove" || e.type == "mouseup") {
+				x -= 12;	//browser bug , the offsetX includes offsetLeft
+				y -= 32;	//browser bug
+			}
+
+			x = x < 0 ? 0 : x > 255 ? 255 : x;
+			y = y < 0 ? 0 : y > 255 ? 255 : y;
+
+			SetBgPosition(document.getElementById("pnlGradientPosition"), x - 5, y - 5);
+			switch (ColorMode) {
+				case 0:
+					var hsb = new Array(0, 0, 0);
+					hsb[1] = x / 255;
+					hsb[2] = 1 - (y / 255);
+					frm.txtHSB_Saturation.value = Math.round(hsb[1] * 100);
+					frm.txtHSB_Brightness.value = Math.round(hsb[2] * 100);
+					Hsb_Changed(e);
+					break;
+				case 1:
+					var hsb = new Array(0, 0, 0);
+					hsb[0] = x / 255;
+					hsb[2] = 1 - (y / 255);
+					frm.txtHSB_Hue.value = hsb[0] == 1 ? 0 : Math.round(hsb[0] * 360);
+					frm.txtHSB_Brightness.value = Math.round(hsb[2] * 100);
+					Hsb_Changed(e);
+					break;
+				case 2:
+					var hsb = new Array(0, 0, 0);
+					hsb[0] = x / 255;
+					hsb[1] = 1 - (y / 255);
+					frm.txtHSB_Hue.value = hsb[0] == 1 ? 0 : Math.round(hsb[0] * 360);
+					frm.txtHSB_Saturation.value = Math.round(hsb[1] * 100);
+					Hsb_Changed(e);
+					break;
+			}
+		}
+		function Hex_Changed(e) {
+			var hex = Form_Get_Hex();
+			var rgb = HexToRgb(hex);
+			var hsb = RgbToHsb(rgb);
+			Form_Set_Rgb(rgb);
+			Form_Set_Hsb(hsb);
+			SetBg(document.getElementById("pnlNewColor"), hex);
+			SetupCursors(e);
+			SetupGradients();
+			checkWebSafe();
+			updateColor("#" + hex);
+		}
+		function Rgb_Changed(e) {
+			var rgb = Form_Get_Rgb();
+			var hsb = RgbToHsb(rgb);
+			var hex = RgbToHex(rgb);
+			Form_Set_Hsb(hsb);
+			Form_Set_Hex(hex);
+			SetBg(document.getElementById("pnlNewColor"), hex);
+			SetupCursors(e);
+			SetupGradients();
+			checkWebSafe();
+			updateColor("#" + hex);
+		}
+		function Hsb_Changed(e) {
+			var hsb = Form_Get_Hsb();
+			var rgb = HsbToRgb(hsb);
+			var hex = RgbToHex(rgb);
+			Form_Set_Rgb(rgb);
+			Form_Set_Hex(hex);
+			SetBg(document.getElementById("pnlNewColor"), hex);
+			SetupCursors(e);
+			SetupGradients();
+			checkWebSafe();
+			updateColor("#"+hex);
+		}
+		function Form_Set_Hex(hex) {
+			frm.txtHex.value = hex;
+		}
+
+		function Form_Get_Hex() {
+			var hex = new String(frm.txtHex.value);
+			for (var i = 0; i < hex.length; i++)
+				if ("0123456789ABCDEFabcdef".indexOf(hex.substr(i, 1)) == -1) {
+					hex = "000000";
+					frm.txtHex.value = hex;
+					alert(formatString(msg.BadNumber, "000000", "FFFFFF"));
+					break;
+				}
+			while (hex.length < 6)
+				hex = "0" + hex;
+			return hex;
+		}
+		function Form_Get_Hsb() {
+			var hsb = new Array(0, 0, 0);
+
+			hsb[0] = new Number(frm.txtHSB_Hue.value) / 360;
+			hsb[1] = new Number(frm.txtHSB_Saturation.value) / 100;
+			hsb[2] = new Number(frm.txtHSB_Brightness.value) / 100;
+			if (hsb[0] > 1 || isNaN(hsb[0])) {
+				hsb[0] = 1;
+				frm.txtHSB_Hue.value = 360;
+				alert(formatString(msg.BadNumber, 0, 360));
+			}
+			if (hsb[1] > 1 || isNaN(hsb[1])) {
+				hsb[1] = 1;
+				frm.txtHSB_Saturation.value = 100;
+				alert(formatString(msg.BadNumber, 0, 100));
+			}
+			if (hsb[2] > 1 || isNaN(hsb[2])) {
+				hsb[2] = 1;
+				frm.txtHSB_Brightness.value = 100;
+				alert(formatString(msg.BadNumber, 0, 100));
+			}
+			return hsb;
+		}
+		function Form_Set_Hsb(hsb) {
+			SetValue(
+				frm.txtHSB_Hue, Math.round(hsb[0] * 360),
+				frm.txtHSB_Saturation, Math.round(hsb[1] * 100),
+				frm.txtHSB_Brightness, Math.round(hsb[2] * 100)
+			)
+		}
+		function Form_Get_Rgb() {
+			var rgb = new Array(0, 0, 0);
+			rgb[0] = new Number(frm.txtRGB_Red.value);
+			rgb[1] = new Number(frm.txtRGB_Green.value);
+			rgb[2] = new Number(frm.txtRGB_Blue.value);
+
+			if (rgb[0] > 255 || isNaN(rgb[0]) || rgb[0] != Math.round(rgb[0])) {
+				rgb[0] = 255;
+				frm.txtRGB_Red.value = 255;
+				alert(formatString(msg.BadNumber, 0, 255));
+			}
+			if (rgb[1] > 255 || isNaN(rgb[1]) || rgb[1] != Math.round(rgb[1])) {
+				rgb[1] = 255;
+				frm.txtRGB_Green.value = 255;
+				alert(formatString(msg.BadNumber, 0, 255));
+			}
+			if (rgb[2] > 255 || isNaN(rgb[2]) || rgb[2] != Math.round(rgb[2])) {
+				rgb[2] = 255;
+				frm.txtRGB_Blue.value = 255;
+				alert(formatString(msg.BadNumber, 0, 255));
+			}
+			return rgb;
+		}
+		function Form_Set_Rgb(rgb) {
+			frm.txtRGB_Red.value = rgb[0];
+			frm.txtRGB_Green.value = rgb[1];
+			frm.txtRGB_Blue.value = rgb[2];
+		}
+		function SetupCursors(e) {
+			var hsb = Form_Get_Hsb();
+			var rgb = Form_Get_Rgb();
+			if (RgbToYuv(rgb)[0] >= .5) SetGradientPositionDark();
+			else SetGradientPositionLight();
+			if (e.target != null) {
+				if (e.target.id == "pnlGradient_Top") return;
+				if (e.target.id == "pnlVertical_Top") return;
+			}
+			var x;
+			var y;
+			var z;
+
+			if (ColorMode >= 0 && ColorMode <= 2)
+				for (var i = 0; i < 3; i++)
+					hsb[i] *= 255;
+
+			switch (ColorMode) {
+				case 0:
+					x = hsb[1];
+					y = hsb[2];
+					z = hsb[0] == 0 ? 1 : hsb[0];
+					break;
+				case 1:
+					x = hsb[0] == 0 ? 1 : hsb[0];
+					y = hsb[2];
+					z = hsb[1];
+					break;
+				case 2:
+					x = hsb[0] == 0 ? 1 : hsb[0];
+					y = hsb[1];
+					z = hsb[2];
+					break;
+			}
+
+			y = 255 - y;
+			z = 255 - z;
+
+			SetBgPosition(document.getElementById("pnlGradientPosition"), x - 5, y - 5);
+			document.getElementById("pnlVerticalPosition").style.top = (z + 27) + "px";
+		}
+		function SetupGradients() {
+			var hsb = Form_Get_Hsb();
+			var rgb = Form_Get_Rgb();
+			switch (ColorMode) {
+				case 0:
+					SetBg(document.getElementById("pnlGradientHsbHue_Hue"), RgbToHex(HueToRgb(hsb[0])));
+					break;
+				case 1:
+					SetBg(document.getElementById("pnlVerticalHsbSaturation_Hue"), RgbToHex(HsbToRgb(new Array(hsb[0], 1, hsb[2]))));
+					break;
+				case 2:
+					SetBg(document.getElementById("pnlVerticalHsbSaturation_Hue"), RgbToHex(HsbToRgb(new Array(hsb[0], hsb[1], 1))));
+					break;
+				default:
+			}
+		}
+		function SetGradientPositionDark() {
+			if (GradientPositionDark) return;
+			GradientPositionDark = true;
+			document.getElementById("pnlGradientPosition").style.backgroundImage = "url(images/cpns_GradientPositionDark.gif)";
+		}
+		function SetGradientPositionLight() {
+			if (!GradientPositionDark) return;
+			GradientPositionDark = false;
+			document.getElementById("pnlGradientPosition").style.backgroundImage = "url(images/cpns_GradientPositionLight.gif)";
+		}
+		function pnlGradient_Top_Click(e) {
+			e.cancelBubble = true;
+			SetGradientPosition(e)
+			document.getElementById("pnlGradient_Top").className = "GradientNormal";
+			_down = false;
+		}
+		var _down = false;
+		function pnlGradient_Top_MouseMove(e) {
+			e.cancelBubble = true;
+			if (!_down) return;
+			SetGradientPosition(e)
+		}
+		function pnlGradient_Top_MouseDown(e) {
+			e.cancelBubble = true;
+			_down = true;
+			SetGradientPosition(e)
+			document.getElementById("pnlGradient_Top").className = "GradientFullScreen";
+		}
+		function pnlGradient_Top_MouseUp(e) {
+			_down = false;
+			e.cancelBubble = true;
+			SetGradientPosition(e)
+			document.getElementById("pnlGradient_Top").className = "GradientNormal";
+		}
+		function Document_MouseUp() {
+			e.cancelBubble = true;
+			document.getElementById("pnlGradient_Top").className = "GradientNormal";
+		}
+		function SetVerticalPosition(e) {
+
+			var z = e.offsetY-6;
+
+			if (z < 27) z = 27;
+			if (z > 282) z = 282;
+			document.getElementById("pnlVerticalPosition").style.top = z + "px";
+			z = 1 - ((z - 27) / 255);
+
+			switch (ColorMode) {
+				case 0:
+					if (z == 1) z = 0;
+					frm.txtHSB_Hue.value = Math.round(z * 360);
+					Hsb_Changed(e);
+					break;
+				case 1:
+					frm.txtHSB_Saturation.value = Math.round(z * 100);
+					Hsb_Changed(e);
+					break;
+				case 2:
+					frm.txtHSB_Brightness.value = Math.round(z * 100);
+					Hsb_Changed(e);
+					break;
+			}
+		}
+		function pnlVertical_Top_Click(e) {
+			SetVerticalPosition(e, e.pageY - 5);
+			e.cancelBubble = true;
+		}
+		function pnlVertical_Top_MouseMove(e) {
+			if (!window._isverdown) return;
+			if (e.which != 1) return;
+			SetVerticalPosition(e, e.pageY - 5);
+			e.cancelBubble = true;
+		}
+		function pnlVertical_Top_MouseDown(e) {
+			window._isverdown = true;
+			SetVerticalPosition(e, e.pageY - 5);
+			e.cancelBubble = true;
+		}
+		function pnlVertical_Top_MouseUp(e) {
+			window._isverdown = false;
+			SetVerticalPosition(e, e.pageY - 5);
+			e.cancelBubble = true;
+		}
+
+
+		function GetQuery(name) {
+			var i = 0;
+			while (window.location.search.indexOf(name + "=", i) != -1) {
+				var value = window.location.search.substr(window.location.search.indexOf(name + "=", i));
+				value = value.substr(name.length + 1);
+				if (value.indexOf("&") != -1)
+					if (value.indexOf("&") == 0)
+						value = "";
+					else
+						value = value.substr(0, value.indexOf("&"));
+				return unescape(value);
+			}
+			return "";
+		}
+		function RgbIsWebSafe(rgb) {
+			var hex = RgbToHex(rgb);
+			for (var i = 0; i < 3; i++)
+				if ("00336699CCFF".indexOf(hex.substr(i * 2, 2)) == -1) return false;
+			return true;
+		}
+		function RgbToWebSafeRgb(rgb) {
+			var safeRgb = new Array(rgb[0], rgb[1], rgb[2]);
+			if (RgbIsWebSafe(rgb)) return safeRgb;
+			var safeValue = new Array(0x00, 0x33, 0x66, 0x99, 0xCC, 0xFF);
+			for (var i = 0; i < 3; i++)
+				for (var j = 1; j < 6; j++)
+					if (safeRgb[i] > safeValue[j - 1] && safeRgb[i] < safeValue[j]) {
+						if (safeRgb[i] - safeValue[j - 1] > safeValue[j] - safeRgb[i])
+							safeRgb[i] = safeValue[j];
+						else
+							safeRgb[i] = safeValue[j - 1];
+						break;
+					}
+			return safeRgb;
+		}
+		function RgbToYuv(rgb) {
+			var yuv = new Array();
+
+			yuv[0] = (rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114) / 255;
+			yuv[1] = (rgb[0] * -0.169 + rgb[1] * -0.332 + rgb[2] * 0.500 + 128) / 255;
+			yuv[2] = (rgb[0] * 0.500 + rgb[1] * -0.419 + rgb[2] * -0.0813 + 128) / 255;
+
+			return yuv;
+		}
+		function RgbToHsb(rgb) {
+			var sRgb = new Array(rgb[0], rgb[1], rgb[2]);
+			var min = new Number(1);
+			var max = new Number(0);
+			var delta = new Number(1);
+			var hsb = new Array(0, 0, 0);
+			var deltaRgb = new Array();
+
+			for (var i = 0; i < 3; i++) {
+				sRgb[i] = rgb[i] / 255;
+				if (sRgb[i] < min) min = sRgb[i];
+				if (sRgb[i] > max) max = sRgb[i];
+			}
+
+			delta = max - min;
+			hsb[2] = max;
+
+			if (delta == 0) return hsb;
+
+			hsb[1] = delta / max;
+
+			for (var i = 0; i < 3; i++)
+				deltaRgb[i] = (((max - sRgb[i]) / 6) + (delta / 2)) / delta;
+
+			if (sRgb[0] == max)
+				hsb[0] = deltaRgb[2] - deltaRgb[1];
+			else if (sRgb[1] == max)
+				hsb[0] = (1 / 3) + deltaRgb[0] - deltaRgb[2];
+			else if (sRgb[2] == max)
+				hsb[0] = (2 / 3) + deltaRgb[1] - deltaRgb[0];
+
+			if (hsb[0] < 0)
+				hsb[0] += 1;
+			else if (hsb[0] > 1)
+				hsb[0] -= 1;
+			return hsb;
+		}
+		function HsbToRgb(hsb) {
+			var rgb = HueToRgb(hsb[0]);
+			var s = hsb[2] * 255;
+
+			for (var i = 0; i < 3; i++) {
+				rgb[i] = rgb[i] * hsb[2];
+				rgb[i] = ((rgb[i] - s) * hsb[1]) + s;
+				rgb[i] = Math.round(rgb[i]);
+			}
+			return rgb;
+		}
+		function RgbToHex(rgb) {
+			var hex = new String();
+
+			for (var i = 0; i < 3; i++) {
+				rgb[2 - i] = Math.round(rgb[2 - i]);
+				hex = rgb[2 - i].toString(16) + hex;
+				if (hex.length % 2 == 1) hex = "0" + hex;
+			}
+
+			return hex.toUpperCase();
+		}
+		function HexToRgb(hex) {
+			var rgb = new Array();
+			for (var i = 0; i < 3; i++)
+				rgb[i] = new Number("0x" + hex.substr(i * 2, 2));
+			return rgb;
+		}
+		function HueToRgb(hue) {
+			var degrees = hue * 360;
+			var rgb = new Array(0, 0, 0);
+			var percent = (degrees % 60) / 60;
+
+			if (degrees < 60) {
+				rgb[0] = 255;
+				rgb[1] = percent * 255;
+			}
+			else if (degrees < 120) {
+				rgb[1] = 255;
+				rgb[0] = (1 - percent) * 255;
+			}
+			else if (degrees < 180) {
+				rgb[1] = 255;
+				rgb[2] = percent * 255;
+			}
+			else if (degrees < 240) {
+				rgb[2] = 255;
+				rgb[1] = (1 - percent) * 255;
+			}
+			else if (degrees < 300) {
+				rgb[2] = 255;
+				rgb[0] = percent * 255;
+			}
+			else if (degrees < 360) {
+				rgb[0] = 255;
+				rgb[2] = (1 - percent) * 255;
+			}
+
+			return rgb;
+		}
+		function CheckHexSelect() {
+			if (window.do_select && window.frm && frm.txtHex) {
+				var color = "#" + frm.txtHex.value;
+				if (color.length == 7) {
+					if (window.__cphex != color) {
+						window.__cphex = color;
+						window.do_select(color)
+					}
+				}
+			}
+		}
+		setInterval(CheckHexSelect, 10);
+	</script>
+
+	<style>
+		body, input, textarea, button, select, fieldset, table {
+			color: windowtext;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			font-size: 12px;
+		}
+
+		table, textarea {
+			text-align: left;
+		}
+
+		button {
+			padding-top: 1px;
+			height: 22px;
+		}
+
+		.formbutton {
+			cursor: pointer;
+			padding: 1px 10px;
+		}
+
+		#uploader input {
+			cursor: pointer;
+			padding: 1px 10px;
+			height: 21px;
+			vertical-align: top;
+		}
+
+		#uploader {
+			padding: 10px 0 10px 30px;
+			width: 100px;
+		}
+
+		fieldset {
+			border: 1px solid #dddddd;
+			padding: 2px;
+		}
+
+		.boxBg {
+			background-color: #dddddd;
+		}
+
+		.boxBorder {
+			border: 1px solid #dddddd;
+		}
+
+		.normal {
+			color: windowtext;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			font-size: 11px;
+		}
+
+		.sortable {
+			color: windowtext;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			font-size: 11px;
+		}
+
+		body {
+			overflow: hidden;
+			margin: 0px;
+			padding: 0px;
+			height: 100%;
+		}
+
+		.buttons a {
+			width: 100px;
+			margin: 0 7px 3px 0;
+			text-decoration: none;
+			background-color: #f5f5f5;
+			background: url(images/formbg.gif) repeat-x left top;
+			border-top: solid 1px #cccccc;
+			border-left: solid 1px #cccccc;
+			border-right: solid 1px #aaaaaa;
+			border-bottom: solid 1px #aaaaaa;
+			padding: 4px 12px 5px 5px;
+			display: block;
+			cursor: pointer;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			font-size: 11px;
+			line-height: 120%;
+			color: #333;
+			outline: none;
+			font-weight: normal;
+		}
+
+			.buttons a img {
+				margin: 0 3px -3px 0 !important;
+				width: 16px;
+				height: 16px;
+				padding: 0 !important;
+				border: none !important;
+				display: inline !important;
+			}
+
+			.buttons a:hover {
+				background-color: #C0DDFC;
+				background: url(images/formbg2.gif) repeat-x left top;
+				border: 1px solid #3388ff;
+				color: #333;
+			}
+
+			.buttons a.current {
+				background-color: #C0DDFC;
+				background: url(images/formbg2.gif) repeat-x left top;
+				border: 1px solid #3388ff;
+				color: #333;
+			}
+
+				.buttons a.current:hover {
+					background: url(images/formbg.gif) repeat-x left top;
+					border-top: solid 1px #cccccc;
+					border-left: solid 1px #cccccc;
+					border-right: solid 1px #aaaaaa;
+					border-bottom: solid 1px #aaaaaa;
+				}
+
+		#div_demo {
+			position: static !important;
+			width: 100% !important;
+			height: 100% !important;
+		}
+
+		#outer {
+			width: 300px;
+			overflow: auto;
+			height: 150px;
+			margin-top: 7px;
+			background-color: #ffffff;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			font-size: 11px;
+			border: #dddddd 1px solid;
+		}
+
+		.inputbuttoncancel, .inputbuttoninsert {
+			width: 80px;
+			padding-top: 2px;
+		}
+
+		.dialogButton {
+			border: 1px solid #f5f5f4;
+			padding: 1px;
+		}
+
+		.editimgDisabled {
+			/*filter:gray alpha(opacity=25);opacity: .25; -moz-opacity: .25;*/
+		}
+
+		.filelistHeadCol A {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			font-size: 11px;
+			/*	cursor: default; */
+			color: windowtext;
+		}
+
+		a.filelistHeadCol:visited, a.filelistHeadCol:link /* Font used for links in the navigation menu */ {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			font-size: 11px;
+			color: #ffffff;
+			text-decoration: none;
+		}
+
+		a.filelistHeadCol:Hover /* Font used for hovering over a link in the navigation menu */ {
+			color: #FF3300;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			font-size: 11px;
+		}
+
+		#container {
+			padding: 10px;
+			margin: 0;
+			text-align: center;
+			background: #eeeeee;
+		}
+
+		#container-bottom {
+			clear: both;
+			text-align: right;
+			padding-right: 30px;
+			margin-right: 30px;
+			background: #eeeeee;
+			margin-top: 5px;
+		}
+
+		.tab-pane-control.tab-pane {
+			position: relative;
+			width: 100%;
+		}
+
+		.tab-pane-control.tab-pane {
+			position: relative;
+			width: 100%;
+		}
+
+		.tab-pane-control .tab-row .tab {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+			font-size: 11px;
+			display: inline;
+			margin: 1px -2px 1px 2px;
+			float: left;
+			padding: 2px 5px 3px 5px;
+			background: #ECECEC url(images/formbn.gif) repeat-x;
+			border: 1px solid;
+			border-color: #898C95;
+			border-bottom: 0;
+			z-index: 1;
+			position: relative;
+			top: 0;
+			cursor: pointer;
+		}
+
+			.tab-pane-control .tab-row .tab.selected {
+				border-bottom: 0;
+				z-index: 3;
+				padding: 2px 6px 5px 7px;
+				margin: 1px -3px -2px 0px;
+				top: -2px;
+				background: #f5f5f5;
+				cursor: pointer;
+			}
+
+			.tab-pane-control .tab-row .tab a {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+				font-size: 11px;
+				font-weight: normal;
+				color: black;
+				text-decoration: none;
+				outline: none;
+			}
+
+		.tab-pane-control .tab-row .hover a {
+			color: blue;
+		}
+
+		.tab-pane-control .tab-page {
+			clear: both;
+			border: 1px solid;
+			border-color: #898C95;
+			background: #f5f5f5;
+			z-index: 2;
+			position: relative;
+			top: -2px;
+			color: black;
+			font: Message-Box;
+			padding: 5px;
+		}
+
+		.tab-pane-control .tab-row {
+			z-index: 1;
+			white-space: nowrap;
+		}
+
+		.tab-pane-control .tab-row {
+			z-index: 1;
+			white-space: nowrap;
+		}
+
+		#FoldersAndFiles {
+			table-layout: fixed;
+		}
+
+			#FoldersAndFiles td {
+				text-align: left;
+				vertical-align: middle;
+			}
+
+		.cursor {
+			cursor: pointer;
+		}
+
+		div.progress-container {
+			background-color: green;
+			height: 5px;
+			width: 50px;
+			font-size: 5px;
+			margin: 2px 5px 2px 6px;
+		}
+
+			div.progress-container div {
+				background-color: red;
+				height: 5px;
+				font-size: 5px
+			}
+
+		#uploadinfo {
+			margin: 0;
+			padding: 0 0 0 20px;
+		}
+
+
+		/*
+-----------------------------------------------------
+Author: Lewis E. Moten III
+Date: May, 16, 2004
+Homepage: http://www.lewismoten.com
+Email: lewis@moten.com
+-----------------------------------------------------
+*/
+
+		/*
+filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+*/
+
+		#pnlRecent DIV {
+			width: 10px;
+			height: 10px;
+			border: solid 1px black;
+			background-color: ButtonFace;
+		}
+
+		#pnlRecentBorder DIV {
+			width: 12px;
+			height: 12px;
+			border-left: 1px solid ThreeDShadow;
+			border-top: 1px solid ThreeDShadow;
+			border-right: 1px solid ThreeDHighlight;
+			border-bottom: 1px solid ThreeDHighlight;
+			background-color: ButtonFace;
+		}
+
+		#pnlRecentBorder {
+			top: 222px;
+			left: 316px;
+			width: 160px;
+			height: 70px;
+		}
+
+		#pnlRecent {
+			top: 223px;
+			left: 317px;
+			width: 160px;
+			height: 70px;
+		}
+
+		#lblRecent {
+			top: 204px;
+			left: 317px;
+			width: 80px;
+			height: 16px;
+		}
+
+		#pnlRecent1 {
+			top: 0px;
+			left: 0px;
+		}
+
+		#pnlRecent2 {
+			top: 0px;
+			left: 20px;
+		}
+
+		#pnlRecent3 {
+			top: 0px;
+			left: 40px;
+		}
+
+		#pnlRecent4 {
+			top: 0px;
+			left: 60px;
+		}
+
+		#pnlRecent5 {
+			top: 0px;
+			left: 80px;
+		}
+
+		#pnlRecent6 {
+			top: 0px;
+			left: 100px;
+		}
+
+		#pnlRecent7 {
+			top: 0px;
+			left: 120px;
+		}
+
+		#pnlRecent8 {
+			top: 0px;
+			left: 140px;
+		}
+
+		#pnlRecent9 {
+			top: 18px;
+			left: 0px;
+		}
+
+		#pnlRecent10 {
+			top: 18px;
+			left: 20px;
+		}
+
+		#pnlRecent11 {
+			top: 18px;
+			left: 40px;
+		}
+
+		#pnlRecent12 {
+			top: 18px;
+			left: 60px;
+		}
+
+		#pnlRecent13 {
+			top: 18px;
+			left: 80px;
+		}
+
+		#pnlRecent14 {
+			top: 18px;
+			left: 100px;
+		}
+
+		#pnlRecent15 {
+			top: 18px;
+			left: 120px;
+		}
+
+		#pnlRecent16 {
+			top: 18px;
+			left: 140px;
+		}
+
+		#pnlRecent17 {
+			top: 36px;
+			left: 0px;
+		}
+
+		#pnlRecent18 {
+			top: 36px;
+			left: 20px;
+		}
+
+		#pnlRecent19 {
+			top: 36px;
+			left: 40px;
+		}
+
+		#pnlRecent20 {
+			top: 36px;
+			left: 60px;
+		}
+
+		#pnlRecent21 {
+			top: 36px;
+			left: 80px;
+		}
+
+		#pnlRecent22 {
+			top: 36px;
+			left: 100px;
+		}
+
+		#pnlRecent23 {
+			top: 36px;
+			left: 120px;
+		}
+
+		#pnlRecent24 {
+			top: 36px;
+			left: 140px;
+		}
+
+		#pnlRecent25 {
+			top: 54px;
+			left: 0px;
+		}
+
+		#pnlRecent26 {
+			top: 54px;
+			left: 20px;
+		}
+
+		#pnlRecent27 {
+			top: 54px;
+			left: 40px;
+		}
+
+		#pnlRecent28 {
+			top: 54px;
+			left: 60px;
+		}
+
+		#pnlRecent29 {
+			top: 54px;
+			left: 80px;
+		}
+
+		#pnlRecent30 {
+			top: 54px;
+			left: 100px;
+		}
+
+		#pnlRecent31 {
+			top: 54px;
+			left: 120px;
+		}
+
+		#pnlRecent32 {
+			top: 54px;
+			left: 140px;
+		}
+
+		#pnlRecentBorder1 {
+			top: 0px;
+			left: 0px;
+		}
+
+		#pnlRecentBorder2 {
+			top: 0px;
+			left: 20px;
+		}
+
+		#pnlRecentBorder3 {
+			top: 0px;
+			left: 40px;
+		}
+
+		#pnlRecentBorder4 {
+			top: 0px;
+			left: 60px;
+		}
+
+		#pnlRecentBorder5 {
+			top: 0px;
+			left: 80px;
+		}
+
+		#pnlRecentBorder6 {
+			top: 0px;
+			left: 100px;
+		}
+
+		#pnlRecentBorder7 {
+			top: 0px;
+			left: 120px;
+		}
+
+		#pnlRecentBorder8 {
+			top: 0px;
+			left: 140px;
+		}
+
+		#pnlRecentBorder9 {
+			top: 18px;
+			left: 0px;
+		}
+
+		#pnlRecentBorder10 {
+			top: 18px;
+			left: 20px;
+		}
+
+		#pnlRecentBorder11 {
+			top: 18px;
+			left: 40px;
+		}
+
+		#pnlRecentBorder12 {
+			top: 18px;
+			left: 60px;
+		}
+
+		#pnlRecentBorder13 {
+			top: 18px;
+			left: 80px;
+		}
+
+		#pnlRecentBorder14 {
+			top: 18px;
+			left: 100px;
+		}
+
+		#pnlRecentBorder15 {
+			top: 18px;
+			left: 120px;
+		}
+
+		#pnlRecentBorder16 {
+			top: 18px;
+			left: 140px;
+		}
+
+		#pnlRecentBorder17 {
+			top: 36px;
+			left: 0px;
+		}
+
+		#pnlRecentBorder18 {
+			top: 36px;
+			left: 20px;
+		}
+
+		#pnlRecentBorder19 {
+			top: 36px;
+			left: 40px;
+		}
+
+		#pnlRecentBorder20 {
+			top: 36px;
+			left: 60px;
+		}
+
+		#pnlRecentBorder21 {
+			top: 36px;
+			left: 80px;
+		}
+
+		#pnlRecentBorder22 {
+			top: 36px;
+			left: 100px;
+		}
+
+		#pnlRecentBorder23 {
+			top: 36px;
+			left: 120px;
+		}
+
+		#pnlRecentBorder24 {
+			top: 36px;
+			left: 140px;
+		}
+
+		#pnlRecentBorder25 {
+			top: 54px;
+			left: 0px;
+		}
+
+		#pnlRecentBorder26 {
+			top: 54px;
+			left: 20px;
+		}
+
+		#pnlRecentBorder27 {
+			top: 54px;
+			left: 40px;
+		}
+
+		#pnlRecentBorder28 {
+			top: 54px;
+			left: 60px;
+		}
+
+		#pnlRecentBorder29 {
+			top: 54px;
+			left: 80px;
+		}
+
+		#pnlRecentBorder30 {
+			top: 54px;
+			left: 100px;
+		}
+
+		#pnlRecentBorder31 {
+			top: 54px;
+			left: 120px;
+		}
+
+		#pnlRecentBorder32 {
+			top: 54px;
+			left: 140px;
+		}
+
+		#pnlVerticalRgb_Start {
+			top: 32px;
+			left: 282px;
+			height: 256px;
+			width: 19px;
+			background-color: white;
+			z-index: 3;
+		}
+
+		#pnlVerticalRgb_End {
+			top: 32px;
+			left: 282px;
+			height: 256px;
+			width: 19px;
+			background-color: cyan;
+			z-index: 4;
+			FILTER: Alpha(Opacity=0, FinishOpacity=100, Style=1, startX=0, finishX=0, startY=0, finishY=100);
+		}
+
+		#pnlGradientRgb_Base {
+			top: 32px;
+			left: 12px;
+			height: 256px;
+			width: 256px;
+			z-index: 3;
+			background-image: url(images/cpns_gradients.png);
+		}
+
+		#pnlGradientRgb_Overlay1 {
+			top: 32px;
+			left: 12px;
+			height: 256px;
+			width: 256px;
+			z-index: 5;
+			background-color: White;
+			FILTER: Alpha(Opacity=0, FinishOpacity=100, Style=0, startX=0, finishX=0, startY=0, finishY=100);
+		}
+
+		#pnlGradientRgb_Overlay2 {
+			top: 32px;
+			left: 12px;
+			height: 256px;
+			width: 256px;
+			z-index: 6;
+			background-color: Black;
+			FILTER: Alpha(Opacity=0, FinishOpacity=100, Style=1, startX=0, finishX=0, startY=0, finishY=100);
+		}
+
+		#pnlGradientRgb_Invert {
+			top: 32px;
+			left: 12px;
+			height: 256px;
+			width: 256px;
+			z-index: 4;
+			background-image: url(images/cpns_gradients.png);
+			filter: flipH() flipV() invert() Alpha(Opacity=50);
+		}
+
+		#pnlVerticalHsbBrightness_Black {
+			top: 32px;
+			left: 282px;
+			height: 256px;
+			width: 19px;
+			background-color: Black;
+			FILTER: Alpha(Opacity=100, FinishOpacity=0, Style=1, startY=100, finishY=0, startX=0, finishX=0);
+			z-index: 4;
+		}
+
+		#pnlVerticalHsbBrightness_Hue {
+			top: 32px;
+			left: 282px;
+			height: 256px;
+			width: 19px;
+			background-color: 0006FF;
+			z-index: 3;
+		}
+		/*
+=====================================================
+*/
+		#pnlVerticalHsbSaturation_White {
+			top: 32px;
+			left: 282px;
+			height: 256px;
+			width: 19px;
+			background-color: White;
+			FILTER: Alpha(Opacity=100, FinishOpacity=0, Style=1, startY=100, finishY=0, startX=0, finishX=0);
+			z-index: 4;
+		}
+
+		#pnlVerticalHsbSaturation_Hue {
+			top: 32px;
+			left: 282px;
+			height: 256px;
+			width: 19px;
+			background-color: 0006FF;
+			z-index: 3;
+		}
+		/*
+--------------------------------------------
+Buttons
+--------------------------------------------
+*/
+		#btnOK {
+			top: 30px;
+			left: 390px;
+			border: 2px bevel;
+			width: 81px;
+			height: 20px;
+		}
+
+		#btnCancel {
+			top: 58px;
+			left: 390px;
+			color: ButtonText;
+			border: 2px bevel;
+			width: 81px;
+			height: 20px;
+		}
+
+		#btnAbout {
+			top: 79px;
+			left: 390px;
+			color: ButtonText;
+			border: 2px bevel;
+			width: 81px;
+			height: 20px;
+		}
+
+		#btnWebSafeColor {
+			border-style: none;
+			border-width: 0px;
+			background-image: url(images/cpns_WebSafe.gif);
+			background-repeat: no-repeat;
+			width: 11px;
+			height: 12px;
+			left: 347px;
+			top: 11px;
+
+			display:none;
+		}
+		/*
+--------------------------------------------
+Basic Controls
+--------------------------------------------
+*/
+		#lblSelectColorMessage {
+			top: 10px;
+			left: 10px;
+			display:none;
+		}
+
+		#pnlOldColor {
+			top: 65px;
+			left: 317px;
+			border-left: 1px solid black;
+			border-bottom: 1px solid black;
+			border-right: 1px solid black;
+			background-color: 00013A;
+			width: 60px;
+			height: 34px;
+			z-index: 2;
+		}
+
+		#pnlOldColorBorder {
+			top: 65px;
+			left: 316px;
+			border-left: 1px solid ThreeDShadow;
+			border-bottom: 1px solid ThreeDHighlight;
+			border-right: 1px solid ThreeDHighlight;
+			width: 62px;
+			height: 35px;
+			z-index: 1;
+		}
+
+		#pnlNewColor {
+			background-color: #2729AD;
+			top: 31px;
+			left: 317px;
+			border-left: 1px solid black;
+			border-top: 1px solid black;
+			border-right: 1px solid black;
+			width: 60px;
+			height: 34px;
+			z-index: 2;
+		}
+
+		#pnlNewColorBorder {
+			top: 30px;
+			left: 316px;
+			border-left: 1px solid ThreeDShadow;
+			border-top: 1px solid ThreeDShadow;
+			border-right: 1px solid ThreeDHighlight;
+			width: 62px;
+			height: 35px;
+			z-index: 1;
+		}
+
+		#pnlWebSafeColor {
+			top: 11px;
+			left: 363px;
+			width: 12px;
+			height: 12px;
+			border: solid 1px black;
+			background-color: #333399;
+			z-index: 2;
+
+			display:none;
+		}
+
+		#pnlWebSafeColorBorder {
+			top: 10px;
+			left: 362px;
+			width: 14px;
+			height: 14px;
+			border-left: 1px solid ThreeDShadow;
+			border-top: 1px solid ThreeDShadow;
+			border-right: 1px solid ThreeDHighlight;
+			border-bottom: 1px solid ThreeDHighlight;
+			z-index: 1;
+			display: none;
+		}
+
+		#pnlVerticalPosition {
+			width: 35px;
+			height: 11px;
+			background-image: url(images/cpns_VerticalPosition.gif);
+			left: 274px;
+			top: 113px;
+		}
+
+		#pnlGradientPosition {
+			width: 256px;
+			height: 256px;
+			background-image: url(images/cpns_GradientPositionLight.gif);
+			background-repeat: no-repeat;
+			left: 12px;
+			top: 32px;
+			z-index: 98;
+		}
+		/*
+--------------------------------------------
+Gradient
+--------------------------------------------
+*/
+		#pnlGradient_Top {
+			top: 32px;
+			left: 12px;
+			height: 256px;
+			width: 256px;
+			cursor: url(images/cpns_Color.cur);
+			z-index: 99;
+		}
+
+		.GradientNormal {
+		}
+
+		.GradientFullScreen {
+			top: 0px !important;
+			left: 0px !important;
+			height: 100% !important;
+			width: 100% !important;
+			z-index: 100;
+			cursor: url(images/cpns_Color.cur) !important;
+		}
+
+		#imgGradient {
+			top: 32px;
+			left: 12px;
+			height: 256px;
+			width: 256px;
+			z-index: 4;
+			position: absolute;
+		}
+
+		#pnlGradient_Background2 {
+			top: 31px;
+			left: 11px;
+			height: 256px;
+			width: 256px;
+			z-index: 2;
+			border: solid 1px black;
+		}
+
+		#pnlGradient_Background1 {
+			top: 30px;
+			left: 10px;
+			height: 258px;
+			width: 258px;
+			z-index: 1;
+			border: solid 1px;
+			border-top-color: ThreeDShadow;
+			border-left-color: ThreeDShadow;
+			border-bottom-color: ThreeDHighlight;
+			border-right-color: ThreeDHighlight;
+		}
+		/*
+--------------------------------------------
+Vertical Bar
+--------------------------------------------
+*/
+		#pnlVertical_Top {
+			left: 272px;
+			width: 39px;
+			z-index: 98;
+			top: 0px;
+			height: 310px;
+		}
+		/*
+	top:32px;
+	height: 256px;
+*/
+
+		#pnlVertical_Background2 {
+			top: 31px;
+			left: 281px;
+			height: 256px;
+			width: 19px;
+			z-index: 2;
+			border: solid 1px black;
+		}
+
+		#pnlVertical_Background1 {
+			top: 30px;
+			left: 280px;
+			height: 256px;
+			width: 21px;
+			z-index: 1;
+			border: solid 1px;
+			border-top-color: ThreeDShadow;
+			border-left-color: ThreeDShadow;
+			border-bottom-color: ThreeDHighlight;
+			border-right-color: ThreeDHighlight;
+		}
+		/*
+--------------------------------------------------------
+Color Mode: Hue / Saturation / Brightness (HSB)
+--------------------------------------------------------
+*/
+		#pnlVerticalHsbHue_Background {
+			top: 32px;
+			left: 282px;
+			height: 256px;
+			width: 19px;
+			z-index: 3;
+			background-image: url(images/cpns_hue2.png);
+		}
+
+		#pnlGradientHsbHue_Black {
+			top: 32px;
+			left: 12px;
+			height: 256px;
+			width: 256px;
+			background-color: Black;
+			FILTER: Alpha(Opacity=100, FinishOpacity=0, Style=1, startY=100, finishY=0, startX=0, finishX=0);
+			z-index: 5;
+		}
+
+		#pnlGradientHsbHue_White {
+			top: 32px;
+			left: 12px;
+			height: 256px;
+			width: 256px;
+			background-color: White;
+			FILTER: Alpha(Opacity=100, FinishOpacity=0, Style=1, startX=0, finishX=100, startY=0, finishY=0);
+			z-index: 4;
+		}
+
+		#pnlGradientHsbHue_Hue {
+			top: 32px;
+			left: 12px;
+			height: 256px;
+			width: 256px;
+			background-color: 0006FF;
+			z-index: 3;
+		}
+
+		#pnlHSB {
+			top: 115px;
+			left: 317px;
+			width: 80px;
+			height: 75px;
+		}
+
+		#pnlHSB_Hue {
+			top: 0px;
+			width: 80px;
+			height: 22px;
+		}
+
+		#pnlHSB_Saturation {
+			top: 25px;
+			width: 80px;
+			height: 22px;
+		}
+
+		#pnlHSB_Brightness {
+			top: 50px;
+			width: 80px;
+			height: 22px;
+		}
+
+		#rdoHSB_Hue {
+			background-color: ButtonFace;
+			color: ButtonText;
+			cursor: default;
+			top: 2px;
+			left: -3px;
+			width: 12px;
+			height: 12px;
+		}
+
+		#lblHSB_Hue {
+			top: 0px;
+			left: 0px;
+			padding-top: 4px;
+			padding-left: 16px;
+			height: 22px;
+			width: 37px;
+		}
+
+		#txtHSB_Hue {
+			top: 0px;
+			left: 37px;
+			border-style: inset;
+			border-width: 2px;
+			width: 31px;
+			height: 22px;
+		}
+
+		#lblUnitHSB_Hue {
+			top: 4px;
+			left: 70px;
+			font-size: 10pt;
+		}
+
+		#rdoHSB_Saturation {
+			background-color: ButtonFace;
+			color: ButtonText;
+			cursor: default;
+			top: 2px;
+			left: -3px;
+			width: 12px;
+			height: 12px;
+		}
+
+		#lblHSB_Saturation {
+			top: 0px;
+			left: 0px;
+			padding-top: 4px;
+			padding-left: 16px;
+			height: 22px;
+			width: 37px;
+		}
+
+		#txtHSB_Saturation {
+			top: 0px;
+			left: 37px;
+			border-style: inset;
+			border-width: 2px;
+			width: 31px;
+			height: 22px;
+		}
+
+		#lblUnitHSB_Saturation {
+			top: 4px;
+			left: 70px;
+		}
+
+		#rdoHSB_Brightness {
+			background-color: ButtonFace;
+			color: ButtonText;
+			cursor: default;
+			top: 2px;
+			left: -3px;
+			width: 12px;
+			height: 12px;
+		}
+
+		#lblHSB_Brightness {
+			top: 0px;
+			left: 0px;
+			padding-top: 4px;
+			padding-left: 16px;
+			height: 22px;
+			width: 37px;
+		}
+
+		#txtHSB_Brightness {
+			top: 0px;
+			left: 37px;
+			border-style: inset;
+			border-width: 2px;
+			width: 31px;
+			height: 22px;
+		}
+
+		#lblUnitHSB_Brightness {
+			top: 4px;
+			left: 70px;
+		}
+		/*
+--------------------------------------------------------
+Color Mode: Red / Green / Blue (RGB a.k.a. additive)
+--------------------------------------------------------
+*/
+		#pnlRGB {
+			top: 115px;
+			left: 400px;
+			width: 75px;
+			height: 75px;
+		}
+
+		#pnlRGB_Red {
+			top: 0px;
+			left: 0px;
+			width: 75px;
+			height: 22px;
+		}
+
+		#pnlRGB_Green {
+			top: 25px;
+			left: 0px;
+			width: 75px;
+			height: 22px;
+		}
+
+		#pnlRGB_Blue {
+			top: 50px;
+			left: 0px;
+			width: 75px;
+			height: 22px;
+		}
+
+		#lblRGB_Red {
+			top: 0px;
+			left: 0px;
+			padding-top: 4px;
+			padding-left: 16px;
+			height: 22px;
+			width: 37px;
+		}
+
+		#txtRGB_Red {
+			top: 0px;
+			left: 37px;
+			border-style: inset;
+			border-width: 2px;
+			width: 31px;
+			height: 22px;
+		}
+
+		#lblRGB_Green {
+			top: 0px;
+			left: 0px;
+			padding-top: 4px;
+			padding-left: 16px;
+			height: 22px;
+			width: 37px;
+		}
+
+		#txtRGB_Green {
+			top: 0px;
+			left: 37px;
+			border-style: inset;
+			border-width: 2px;
+			width: 31px;
+			height: 22px;
+		}
+
+		#lblRGB_Blue {
+			top: 0px;
+			left: 0px;
+			padding-top: 4px;
+			padding-left: 16px;
+			height: 22px;
+			width: 37px;
+		}
+
+		#txtRGB_Blue {
+			top: 0px;
+			left: 37px;
+			border-style: inset;
+			border-width: 2px;
+			width: 31px;
+			height: 22px;
+		}
+		/*
+--------------------------------------------------------
+Color Mode: Hex (Hex values of RGB a.k.a. HTML Color value)
+--------------------------------------------------------
+*/
+		#lblHex {
+			top: 195px;
+			left: 400px;
+		}
+
+		#txtHex {
+			top: 195px;
+			left: 412px;
+			border-style: inset;
+			border-width: 2px;
+			width: 56px;
+			height: 22px;
+		}
+
+
+
+
+		/*
+--------------------------------------------
+Elements
+--------------------------------------------
+*/
+
+		#colorpickerpanel INPUT {
+			position: absolute;
+			font-family: "Photoshop Large", Arial;
+			font-size: 8pt;
+			color: WindowText;
+			background-color: Window;
+			cursor: text;
+			text-align: right;
+		}
+
+		#colorpickerpanel .Button {
+			position: absolute;
+			font-family: "Photoshop Large", Arial;
+			font-size: 8pt;
+			color: ButtonText;
+			cursor: default;
+			background-color: ButtonFace;
+			text-align: center;
+		}
+
+		#colorpickerpanel DIV {
+			position: absolute;
+			font-family: "Photoshop Large", Arial;
+			font-size: 8pt;
+			color: ButtonText;
+			cursor: default;
+			overflow: hidden;
+		}
+
+		#colorpickerpanel IMG {
+			position: absolute;
+			cursor: default;
+			overflow: hidden;
+		}
+
+	</style>
+
+
+	<style type="text/css">
+		.colorcell {
+			width: 16px;
+			height: 17px;
+			cursor: pointer;
+		}
+
+		.colordiv, .customdiv {
+			border: solid 1px #808080;
+			width: 16px;
+			height: 17px;
+			font-size: 1px;
+		}
+
+		#ajaxdiv {
+			margin: 0;
+			text-align: center;
+		}
+	</style>
+	<title>CustomColor</title>
+</head>
+<body>
+	<div id="ajaxdiv">
+
+		<div id="colorpickerpanel" style="position: relative; text-align: left; height: 350px">
+			<!--
+			-----------------------------------------------------
+			Author: Lewis E. Moten III
+			Date: May, 16, 2004
+			Homepage: http://www.lewismoten.com
+			Email: lewis@moten.com
+			-----------------------------------------------------
+			-->
+			<div id="pnlGradient_Top">
+			</div>
+			<div id="pnlGradient_Background1">
+			</div>
+			<div id="pnlGradient_Background2">
+			</div>
+			<img id="imgGradient">
+			<div id="pnlGradientRgb_Overlay1">
+			</div>
+			<div id="pnlGradientRgb_Overlay2">
+			</div>
+			<img id="pnlVerticalHsbSaturation_Hue">
+			<div id="pnlVertical_Background2">
+			</div>
+			<div id="pnlVertical_Background1">
+			</div>
+			<div id="pnlVertical_Top">
+			</div>
+			<!-- HSB: Hue -->
+			<div id="pnlGradientHsbHue_Hue">
+			</div>
+			<div id="pnlVerticalHsbHue_Background">
+			</div>
+			<div id="pnlOldColor">
+			</div>
+			<div id="pnlOldColorBorder">
+			</div>
+			<div id="pnlNewColor">
+			</div>
+			<div id="pnlNewColorBorder">
+			</div>
+			<div id="pnlWebSafeColor" title="Click to select web safe color">
+			</div>
+			<div id="pnlWebSafeColorBorder">
+			</div>
+			<div id="pnlVerticalPosition">
+			</div>
+			<div id="pnlGradientPosition">
+			</div>
+			<div id="lblSelectColorMessage">
+				SelectColor:
+			</div>
+			<div id="lblRecent">
+				Recent:
+			</div>
+			<div id="pnlRecentBorder">
+				<div id="pnlRecentBorder1">
+				</div>
+				<div id="pnlRecentBorder2">
+				</div>
+				<div id="pnlRecentBorder3">
+				</div>
+				<div id="pnlRecentBorder4">
+				</div>
+				<div id="pnlRecentBorder5">
+				</div>
+				<div id="pnlRecentBorder6">
+				</div>
+				<div id="pnlRecentBorder7">
+				</div>
+				<div id="pnlRecentBorder8">
+				</div>
+				<div id="pnlRecentBorder9">
+				</div>
+				<div id="pnlRecentBorder10">
+				</div>
+				<div id="pnlRecentBorder11">
+				</div>
+				<div id="pnlRecentBorder12">
+				</div>
+				<div id="pnlRecentBorder13">
+				</div>
+				<div id="pnlRecentBorder14">
+				</div>
+				<div id="pnlRecentBorder15">
+				</div>
+				<div id="pnlRecentBorder16">
+				</div>
+				<div id="pnlRecentBorder17">
+				</div>
+				<div id="pnlRecentBorder18">
+				</div>
+				<div id="pnlRecentBorder19">
+				</div>
+				<div id="pnlRecentBorder20">
+				</div>
+				<div id="pnlRecentBorder21">
+				</div>
+				<div id="pnlRecentBorder22">
+				</div>
+				<div id="pnlRecentBorder23">
+				</div>
+				<div id="pnlRecentBorder24">
+				</div>
+				<div id="pnlRecentBorder25">
+				</div>
+				<div id="pnlRecentBorder26">
+				</div>
+				<div id="pnlRecentBorder27">
+				</div>
+				<div id="pnlRecentBorder28">
+				</div>
+				<div id="pnlRecentBorder29">
+				</div>
+				<div id="pnlRecentBorder30">
+				</div>
+				<div id="pnlRecentBorder31">
+				</div>
+				<div id="pnlRecentBorder32">
+				</div>
+			</div>
+			<div id="pnlRecent">
+				<div id="pnlRecent1">
+				</div>
+				<div id="pnlRecent2">
+				</div>
+				<div id="pnlRecent3">
+				</div>
+				<div id="pnlRecent4">
+				</div>
+				<div id="pnlRecent5">
+				</div>
+				<div id="pnlRecent6">
+				</div>
+				<div id="pnlRecent7">
+				</div>
+				<div id="pnlRecent8">
+				</div>
+				<div id="pnlRecent9">
+				</div>
+				<div id="pnlRecent10">
+				</div>
+				<div id="pnlRecent11">
+				</div>
+				<div id="pnlRecent12">
+				</div>
+				<div id="pnlRecent13">
+				</div>
+				<div id="pnlRecent14">
+				</div>
+				<div id="pnlRecent15">
+				</div>
+				<div id="pnlRecent16">
+				</div>
+				<div id="pnlRecent17">
+				</div>
+				<div id="pnlRecent18">
+				</div>
+				<div id="pnlRecent19">
+				</div>
+				<div id="pnlRecent20">
+				</div>
+				<div id="pnlRecent21">
+				</div>
+				<div id="pnlRecent22">
+				</div>
+				<div id="pnlRecent23">
+				</div>
+				<div id="pnlRecent24">
+				</div>
+				<div id="pnlRecent25">
+				</div>
+				<div id="pnlRecent26">
+				</div>
+				<div id="pnlRecent27">
+				</div>
+				<div id="pnlRecent28">
+				</div>
+				<div id="pnlRecent29">
+				</div>
+				<div id="pnlRecent30">
+				</div>
+				<div id="pnlRecent31">
+				</div>
+				<div id="pnlRecent32">
+				</div>
+			</div>
+			<div id="lblHex">
+				#
+			</div>
+			<form id="frmColorPicker">
+				<div id="pnlHSB">
+					<div id="pnlHSB_Hue" title="Hue">
+						<input type="radio" id="rdoHSB_Hue" name="ColorType" checked>
+						<div id="lblHSB_Hue">
+							H:
+						</div>
+						<input type="text" id="txtHSB_Hue">
+						<div id="lblUnitHSB_Hue">
+						</div>
+					</div>
+					<div id="pnlHSB_Saturation" title="Saturation">
+						<input type="radio" id="rdoHSB_Saturation" name="ColorType">
+						<div id="lblHSB_Saturation">
+							S:
+						</div>
+						<input type="text" id="txtHSB_Saturation">
+						<div id="lblUnitHSB_Saturation">
+							%
+						</div>
+					</div>
+					<div id="pnlHSB_Brightness" title="Brightness">
+						<input type="radio" id="rdoHSB_Brightness" name="ColorType">
+						<div id="lblHSB_Brightness">
+							B:
+						</div>
+						<input type="text" id="txtHSB_Brightness">
+						<div id="lblUnitHSB_Brightness">
+							%
+						</div>
+					</div>
+				</div>
+				<div id="pnlRGB">
+					<div id="pnlRGB_Red" title="Red">
+						<div id="lblRGB_Red">
+							R:
+						</div>
+						<input type="text" id="txtRGB_Red">
+					</div>
+					<div id="pnlRGB_Green" title="Green">
+						<div id="lblRGB_Green">
+							G:
+						</div>
+						<input type="text" id="txtRGB_Green">
+					</div>
+					<div id="pnlRGB_Blue" title="Blue">
+						<div id="lblRGB_Blue">
+							B:
+						</div>
+						<input type="text" id="txtRGB_Blue">
+					</div>
+				</div>
+				<input type="text" id="txtHex" maxlength="6">
+				<input id="btnWebSafeColor" type="button" title="Warning: not a web safe color" class="Button">
+				<input id="btnOK" type="button" value="OK" class="Button">
+				<input id="btnCancel" type="button" value="Cancel" class="Button">
+				<input id="btnAbout" type="button" value="About" class="Button" style="display: none">
+			</form>
+		</div>
+
+	</div>
+</body>
+
+<script>
+
+	new function () {
+		var editor = parent.rtecolorpickereditor;
+		var ns = document.getElementsByTagName("*");
+		for (var i = 0; i < ns.length; i++) {
+			var n = ns[i];
+			if (n.getAttribute('langtext') != "1") continue;
+			var t = n.innerText || n.textContent || "";
+			if (t) {
+				t = editor.getLangText(t);
+				n.innerText = t;
+				n.textContent = t;
+			}
+			var t = n.value || "";
+			if (t) {
+				t = editor.getLangText(t);
+				n.value = t;
+			}
+		}
+	}
+
+</script>
+
+</html>
