@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class FileUploadService {
     private static final String UPLOAD_DIRECTORY_NAME = "/uploads";
@@ -27,7 +26,7 @@ public class FileUploadService {
     }
 
     private FileItem writeFile(String pathName, InputStream inputStream, ContentDisposition contentDisposition) {
-        Path uploadPath = Paths.get(context.getRealPath(pathName));
+        Path uploadPath = Path.of(context.getRealPath(pathName));
         String extension = FilenameUtils.getExtension(contentDisposition.getFileName());
         String fileName = System.currentTimeMillis() + "." + extension;
 
