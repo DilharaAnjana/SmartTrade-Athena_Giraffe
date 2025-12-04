@@ -20,6 +20,36 @@ import java.util.List;
 import java.util.Set;
 
 public class ProductService {
+    // make method fot the retrieve single product data
+    public String getSingleProduct(int productId) {
+        JsonObject responseObject = new JsonObject();
+        // call previously made method for the get product
+        Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+        Product product = hibernateSession.find(Product.class, productId);
+        ProductDTO productDTO = new ProductDTO();// make dto object for transfer product data
+        productDTO.setProductId(productId);
+        productDTO.setTitle(product.getTitle());
+        productDTO.setBrandName(product.getModel().getBrand().getName());
+        productDTO.setModelName(product.getModel().getName());
+        productDTO.setQualityValue(product.getQuality().getValue());
+        List<StockDTO> stockDTOList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd yyyy");
+        for (Stock stock : product.getStocks()) {
+            StockDTO stockDTO = new StockDTO();
+            stockDTO.setProductId(stock.getProduct().getId());
+            stockDTO.setStockId(stock.getId());
+            stockDTO.setQty(stock.getQty());
+            stockDTO.setPrice(stock.getPrice());
+            stockDTO.setCreatedAt(formatter.format(stock.getCreatedAt()));
+            stockDTOList.add(stockDTO);
+        }
+        productDTO.setStockDTOList(stockDTOList);
+        productDTO.setImages(product.getImages());
+        responseObject.add("singleProduct", AppUtil.GSON.toJsonTree(productDTO));
+        hibernateSession.close();
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
     public String getAllUserProducts(@Context HttpServletRequest request) {
         JsonObject responseObject = new JsonObject();
         boolean status = false;
