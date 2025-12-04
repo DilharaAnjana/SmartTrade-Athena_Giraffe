@@ -22,8 +22,21 @@ window.addEventListener("load", async () => {
 // make function for the fetch single product data
 async function loadSingleProduct() {
     try {
+        // make backend request
+        const response = await fetch(`api/products/single-product?productId=${productId}`);
+        if (response.ok) {// check status 200
+            const data = await response.json();
+            console.log(data);
+        } else {
+            Notiflix.Notify.failure("Single product data loading failed!", {
+                position: 'center-top'
+            });
 
+        }
     } catch (e) {
+        Notiflix.Notify.failure(e.message, {
+            position: 'center-top'
+        });
 
     }
 }
