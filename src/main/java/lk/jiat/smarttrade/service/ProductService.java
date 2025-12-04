@@ -23,15 +23,19 @@ public class ProductService {
     // make method fot the retrieve single product data
     public String getSingleProduct(int productId) {
         JsonObject responseObject = new JsonObject();
-        // call previously made method for the get product
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
         Product product = hibernateSession.find(Product.class, productId);
         ProductDTO productDTO = new ProductDTO();// make dto object for transfer product data
         productDTO.setProductId(productId);
         productDTO.setTitle(product.getTitle());
+        productDTO.setDescription(product.getDescription());
         productDTO.setBrandName(product.getModel().getBrand().getName());
         productDTO.setModelName(product.getModel().getName());
         productDTO.setQualityValue(product.getQuality().getValue());
+
+        productDTO.setColorValue(product.getColor().getValue());
+        productDTO.setStorageValue(product.getStorage().getValue());
+
         List<StockDTO> stockDTOList = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd yyyy");
         for (Stock stock : product.getStocks()) {
