@@ -6,12 +6,70 @@ import lk.jiat.smarttrade.dto.StockDTO;
 import lk.jiat.smarttrade.entity.*;
 import lk.jiat.smarttrade.util.AppUtil;
 import lk.jiat.smarttrade.util.HibernateUtil;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContentService {
+    private static final int FIRST_RESULT = 0;
+    private static final int MAX_RESULT = 6;
+    public String loadProductData() {
+        JsonObject responseObject = new JsonObject();
+        Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+        // load all brands
+        List<Brand> brands = hibernateSession.createQuery("FROM Brand b", Brand.class).getResultList();
+        List<JsonObject> brandList = ContentService.brands(brands);
+        // load all conditions
+        List<Quality> qualityList = hibernateSession.createQuery("FROM Quality q", Quality.class).getResultList();
+
+        // load all colors
+        List<Color> colorList = hibernateSession.createQuery("FROM Color c", Color.class).getResultList();
+
+        // load all storages
+        List<Storage> storageList = hibernateSession.createQuery("FROM Storage s", Storage.class).getResultList();
+
+        // load min/max price
+        Double minPrice = hibernateSession.createQuery("SELECT MIN(s.price) FROM Stock s", Double.class).uniqueResult();
+        Double maxPrice = hibernateSession.createQuery("SELECT MAX(s.price) FROM Stock s", Double.class).uniqueResult();
+
+        // load products
+        Status approvedStatus = hibernateSession.createNamedQuery("Status.findByValue", Status.class)
+                .setParameter("value", String.valueOf(Status.Type.APPROVED))
+                .uniqueResult();
+        Query<Stock> query = hibernateSession.createQuery("FROM Stock s WHERE s.status =:status ORDER BY s.id DESC", Stock.class)
+                .setParameter("status",approvedStatus);
+        // get product count
+        responseObject.addProperty("allProductCount",query.getResultList().size());
+        // filter product
+        query.setFirstResult(ContentService.FIRST_RESULT);
+        query.setMaxResults(ContentService.MAX_RESULT);
+        List<Stock> stockList = query.getResultList();
+        List<ProductDTO> productList = new ArrayList<>();
+        for(Stock s:stockList){
+            ProductDTO productDTO = new ProductDTO();
+            productDTO.setProductId(s.getProduct().getId());
+            productDTO.setTitle(s.getProduct().getTitle());
+            productDTO.setImages(s.getProduct().getImages());
+            productDTO.setPrice(s.getPrice());
+            productList.add(productDTO);
+        }
+        hibernateSession.close();
+
+        // attach results to the response object
+        responseObject.add("brandList",AppUtil.GSON.toJsonTree(brandList));
+        responseObject.add("qualityList",AppUtil.GSON.toJsonTree(qualityList));
+        responseObject.add("colorList",AppUtil.GSON.toJsonTree(colorList));
+        responseObject.add("storageList",AppUtil.GSON.toJsonTree(storageList));
+        responseObject.add("productList",AppUtil.GSON.toJsonTree(productList));
+        responseObject.addProperty("minPrice",minPrice);
+        responseObject.addProperty("maxPrice",maxPrice);
+
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
     public String loadNewArrivalProducts() {
         JsonObject responseObject = new JsonObject();
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
