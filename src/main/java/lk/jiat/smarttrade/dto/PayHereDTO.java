@@ -21,18 +21,18 @@ public class PayHereDTO {
     hash - Generated hash value as mentioned below (*Required from 2023-01-16)
      */
     private boolean sandbox;
-    private String merchantId;
-    private String returnURL;
-    private String cancelURL;
-    private String notifyURL;
-    private String firstName;
-    private String lastName;
+    private String merchant_id;
+    private String return_url;
+    private String cancel_url;
+    private String notify_url;
+    private String first_name;
+    private String last_name;
     private String email;
     private String phone;
     private String address;
     private String city;
     private String country;
-    private String orderId;
+    private String order_id;
     private String items;
     private String currency;
     private String amount;
@@ -47,51 +47,51 @@ public class PayHereDTO {
     }
 
     public String getMerchantId() {
-        return merchantId;
+        return merchant_id;
     }
 
-    public void setMerchantId(String merchantId) {
-        this.merchantId = merchantId;
+    public void setMerchantId(String merchant_id) {
+        this.merchant_id = merchant_id;
     }
 
     public String getReturnURL() {
-        return returnURL;
+        return return_url;
     }
 
-    public void setReturnURL(String returnURL) {
-        this.returnURL = returnURL;
+    public void setReturnURL(String return_url) {
+        this.return_url = return_url;
     }
 
     public String getCancelURL() {
-        return cancelURL;
+        return cancel_url;
     }
 
-    public void setCancelURL(String cancelURL) {
-        this.cancelURL = cancelURL;
+    public void setCancelURL(String cancel_url) {
+        this.cancel_url = cancel_url;
     }
 
     public String getNotifyURL() {
-        return notifyURL;
+        return notify_url;
     }
 
-    public void setNotifyURL(String notifyURL) {
-        this.notifyURL = notifyURL;
+    public void setNotifyURL(String notify_url) {
+        this.notify_url = notify_url;
     }
 
     public String getFirstName() {
-        return firstName;
+        return first_name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String first_name) {
+        this.first_name = first_name;
     }
 
     public String getLastName() {
-        return lastName;
+        return last_name;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastName(String last_name) {
+        this.last_name = last_name;
     }
 
     public String getEmail() {
@@ -135,11 +135,11 @@ public class PayHereDTO {
     }
 
     public String getOrderId() {
-        return orderId;
+        return order_id;
     }
 
     public void setOrderId(String orderId) {
-        this.orderId = orderId;
+        this.order_id = orderId;
     }
 
     public String getItems() {
