@@ -247,8 +247,8 @@ public class CheckoutService {
     private PayHereDTO createPaymentDetails(Session hibernateSession, Order o) {
         // app.public.url - Ngrok url for the https connection. this is proxy url that replace the localhost url
         String order_id = "#000" + o.getId();
-        String return_url = Env.get("app.public.url") + "/smarttrade/api/payments/return";
-        String cancel_url = Env.get("app.public.url") + "/smarttrade/api/payments/cancel";
+        String return_url = Env.get("app.public.url") + "/api/payments/return";
+        String cancel_url = Env.get("app.public.url") + "/api/payments/cancel";
         String notify_url = Env.get("app.public.url") + "/smarttrade/api/payments/notify";
 
         Order order = hibernateSession.find(Order.class, o.getId());
