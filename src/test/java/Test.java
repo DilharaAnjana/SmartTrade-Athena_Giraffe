@@ -5,6 +5,7 @@ import lk.jiat.smarttrade.mail.VerificationMail;
 import lk.jiat.smarttrade.provider.MailServiceProvider;
 import lk.jiat.smarttrade.util.AppUtil;
 import lk.jiat.smarttrade.util.HibernateUtil;
+import lk.jiat.smarttrade.validation.Validator;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -18,7 +19,7 @@ public class Test {
 //        VerificationMail verificationMail = new VerificationMail("anjana.jiat@gmail.com", "123456");
 //        MailServiceProvider.getInstance().sendMail(verificationMail);
 
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+//        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 //        String s = AppUtil.generateCode();
 //        System.out.println(s);
 //        try (Session s = HibernateUtil.getSessionFactory().openSession()) {
@@ -28,5 +29,9 @@ public class Test {
 //
 //
 //        }
+        String orderCode = "Order25";
+
+        int orderId = Integer.parseInt(orderCode.replaceAll(Validator.NON_DIGIT_PATTERN, ""));
+        System.out.println(orderId);
     }
 }
