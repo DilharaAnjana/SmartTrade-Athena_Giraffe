@@ -105,9 +105,9 @@ async function loadCheckoutData() {
                 city_select.addEventListener("change", (e) => {
                     let cityName = city_select.options[city_select.selectedIndex]?.text || "";
                     if (cityName === "Colombo") {
-                        shipping_charges =  deliveryTypes[0].price;
+                        shipping_charges = deliveryTypes[0].price;
                     } else {
-                        shipping_charges =  deliveryTypes[1].price;
+                        shipping_charges = deliveryTypes[1].price;
                     }
 
                     st_order_shipping_tr.querySelector("#st-product-shipping-charges").textContent =
@@ -127,7 +127,7 @@ async function loadCheckoutData() {
                     Notiflix.Notify.info(data.message || "Failed to load checkout data");
                 }
             }
-        }else{
+        } else {
             if (response.status === 401) {
                 window.location = "sign-in.html";
             }
@@ -170,9 +170,10 @@ async function checkout() {
 
         const data = await response.json();
         if (data.status) {
-            console.log( data);
+            console.log(data);
             Notiflix.Notify.success("Checkout success:", data.message, {position: 'center-top'});
             // PayHere payment
+            payhere.startPayment(data.PayHere);
         } else {
             Notiflix.Notify.failure(data.message || "Checkout failed", {position: 'center-top'});
         }
@@ -180,3 +181,26 @@ async function checkout() {
         Notiflix.Notify.failure("Something went wrong. Please try again.", {position: 'center-top'});
     }
 }
+
+// Payment completed. It can be a successful failure.
+payhere.onCompleted = function onCompleted(orderId) {
+    console.log("Payment completed. OrderID:" + orderId);
+    // Note: validate the payment and show success or failure page to the customer
+};
+
+// Payment window closed
+payhere.onDismissed = function onDismissed() {
+    // Note: Prompt user to pay again or show an error page
+    console.log("Payment dismissed");
+};
+
+// Error occurred
+payhere.onError = function onError(error) {
+    // Note: show an error page
+    console.log("Error:" + error);
+};
+// Don't use these functions for the remove cart items. Because sometimes use can close the tab or etc.
+// But you can redirect another page using these functions like this
+// payhere.onCompleted = function onCompleted(orderId) {
+//     window.location.href = "/payment-success.html";
+// };
