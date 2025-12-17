@@ -8,8 +8,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
 public class PayHereUtil {
-    private static final String MERCHANT_ID = "1231403"; // replace with your merchant id
-    private static final String MERCHANT_SECRET = "MjIyNTA3MDU2MzYzNTQxMTcwNDE1MDQ3NzA3OTMzNTA3NjU4MzM0"; // replace with your merchant secret
+    private static final String MERCHANT_ID = ""; // replace with your merchant id
+    private static final String MERCHANT_SECRET = ""; // replace with your merchant secret
 
     public static String getMerchantId() {
         return MERCHANT_ID;
