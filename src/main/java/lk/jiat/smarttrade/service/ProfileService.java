@@ -140,21 +140,27 @@ public class ProfileService {
         } else if (userDTO.getPassword().isBlank()) {
             message = "Password can not be empty!";
         } else if (!userDTO.getPassword().matches(Validator.PASSWORD_VALIDATION)) {
-            message = "Please provide valid password. \n " +
-                    "The password must be at least 8 characters long and include at least one uppercase letter, " +
-                    "one lowercase letter, one digit, and one special character";
+            message = """
+                    Please provide valid password.\s
+                     \
+                    The password must be at least 8 characters long and include at least one uppercase letter, \
+                    one lowercase letter, one digit, and one special character""";
         } else if (userDTO.getNewPassword() != null &&
                 !userDTO.getNewPassword().isBlank() &&
                 !userDTO.getNewPassword().matches(Validator.PASSWORD_VALIDATION)) {
-            message = "New password is not valid. \n " +
-                    "The password must be at least 8 characters long and include at least one uppercase letter, " +
-                    "one lowercase letter, one digit, and one special character";
+            message = """
+                    New password is not valid.\s
+                     \
+                    The password must be at least 8 characters long and include at least one uppercase letter, \
+                    one lowercase letter, one digit, and one special character""";
         } else if (userDTO.getConfirmPassword() != null &&
                 !userDTO.getConfirmPassword().isBlank() &&
                 !userDTO.getConfirmPassword().matches(Validator.PASSWORD_VALIDATION)) {
-            message = "Confirm password not valid. \n " +
-                    "The password must be at least 8 characters long and include at least one uppercase letter, " +
-                    "one lowercase letter, one digit, and one special character";
+            message = """
+                    Confirm password not valid.\s
+                     \
+                    The password must be at least 8 characters long and include at least one uppercase letter, \
+                    one lowercase letter, one digit, and one special character""";
         } else if (userDTO.getNewPassword() != null && userDTO.getConfirmPassword() != null && !userDTO.getConfirmPassword().equals(userDTO.getNewPassword())) {
             message = "New password and confirm password did not match";
         } else {

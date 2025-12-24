@@ -43,9 +43,11 @@ public class UserService {
         } else if (userDTO.getPassword().isBlank()) {
             message = "Password can not be empty!";
         } else if (!userDTO.getPassword().matches(Validator.PASSWORD_VALIDATION)) {
-            message = "Please provide valid password. \n " +
-                    "The password must be at least 8 characters long and include at least one uppercase letter, " +
-                    "one lowercase letter, one digit, and one special character";
+            message = """
+                    Please provide valid password.\s
+                     \
+                    The password must be at least 8 characters long and include at least one uppercase letter, \
+                    one lowercase letter, one digit, and one special character""";
         } else {
             Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
             User singleUser = hibernateSession.createNamedQuery("User.getByEmail", User.class)
@@ -161,9 +163,11 @@ public class UserService {
         } else if (userDTO.getPassword().isBlank()) {
             message = "Password can not be empty!";
         } else if (!userDTO.getPassword().matches(Validator.PASSWORD_VALIDATION)) {
-            message = "Please provide valid password. \n " +
-                    "The password must be at least 8 characters long and include at least one uppercase letter, " +
-                    "one lowercase letter, one digit, and one special character";
+            message = """
+                    Please provide valid password.\s
+                     \
+                    The password must be at least 8 characters long and include at least one uppercase letter, \
+                    one lowercase letter, one digit, and one special character""";
         } else {
             Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
             User singleUser = hibernateSession.createNamedQuery("User.getByEmail", User.class)

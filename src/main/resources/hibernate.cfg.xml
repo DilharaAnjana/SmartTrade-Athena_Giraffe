@@ -6,9 +6,13 @@
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/smarttrade?useSSL=false&amp;allowPublicKeyRetrieval=true</property>
-        <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">050201@Dilhara</property>
+        <!-- Azure MySQL connection URL - update with your Azure MySQL server details -->
+        <!-- For managed identity, use environment variables or configure in application.properties -->
+        <property name="hibernate.connection.url">jdbc:mysql://${AZURE_MYSQL_SERVER_NAME}.mysql.database.azure.com:3306/${AZURE_MYSQL_DATABASE_NAME}</property>
+        <!-- Username should be the managed identity name -->
+        <property name="hibernate.connection.username">${AZURE_MYSQL_USERNAME}</property>
+        <!-- Password removed - using Azure Managed Identity passwordless authentication -->
+        <!-- Managed identity configuration is handled by Spring Cloud Azure in application.properties -->
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.show_sql">true</property>
 
