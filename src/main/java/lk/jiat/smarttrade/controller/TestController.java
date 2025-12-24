@@ -9,7 +9,7 @@ import lk.jiat.smarttrade.annotation.IsUser;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Path("/test")
 public class TestController {
@@ -18,7 +18,7 @@ public class TestController {
     @Produces(MediaType.TEXT_HTML)
     public Response test() {
         try {
-            return Response.ok().entity(new String(Files.readAllBytes(Path.of("src/main/webapp/sign-in.html")))).build();
+            return Response.ok().entity(new String(Files.readAllBytes(Paths.get("src/main/webapp/sign-in.html")))).build();
         } catch (IOException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 
