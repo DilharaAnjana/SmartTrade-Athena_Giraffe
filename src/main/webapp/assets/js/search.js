@@ -158,6 +158,89 @@ function updateProductView(data) {
 }
 
 async function searchProduct(firstResult) {
+    try {
+        Notiflix.Loading.pulse("Wait...", {
+            clickToClose: false,
+            svgColor: '#0284c7'
+        });
 
+        const brandName = document.getElementById("brand-options")
+            .querySelector(".chosen")?.querySelector("a").innerHTML; // ==> ? optional changing => access if exists
+
+        const conditionValue = document.getElementById("condition-options")
+            .querySelector(".chosen")?.querySelector("a").innerHTML;
+
+        const colorValue = document.getElementById("color-options")
+            .querySelector(".chosen")?.querySelector("a").style.backgroundColor;
+
+        const storageValue = document.getElementById("storage-options")
+            .querySelector(".chosen")?.querySelector("a").innerHTML;
+
+        const priceStart = $("#slider-range").slider("values", 0); // left side value
+        const priceEnd = $("#slider-range").slider("values", 1); // right side value
+
+        const stSort = document.getElementById("st-sort").value;
+
+        const searchData = {
+            firstResult:firstResult,
+            brandName:brandName,
+            conditionValue:conditionValue,
+            colorValue:colorValue,
+            storageValue:storageValue,
+            priceStart:priceStart,
+            priceEnd:priceEnd,
+            sortValue:stSort
+        };
+
+        const searchDataJson = JSON.stringify(searchData);
+
+        const response = await fetch("api/advanced-search/search-data", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body:searchDataJson
+        })
+        if (response.ok) {
+            const data = await response.json();
+            if (data.status) {
+                updateProductView(data);
+                Notiflix.Notify.success("Search operation success", {
+                    position: 'center-top'
+                });
+            } else {
+                Notiflix.Notify.failure(data.message, {
+                    position: 'center-top'
+                });
+            }
+        } else {
+            Notiflix.Notify.failure("Search operation failed!", {
+                position: 'center-top'
+            });
+        }
+    } catch (e) {
+        Notiflix.Notify.failure(e.message, {
+            position: 'center-top'
+        });
+    } finally {
+        Notiflix.Loading.remove();
+    }
 }
 
+function resetFilters() {
+    const prefixArray = ["brand", "condition", "color", "storage"];
+    prefixArray.forEach((prefix) => {
+        const all_li = document.querySelectorAll("#" + prefix + "-options li");
+        all_li.forEach((line) => {
+            if (line.classList.contains("chosen")) {
+                line.classList.remove("chosen");
+            }
+        });
+    });
+
+    // reset price range
+    const min = $("#slider-range").slider("option", "min");
+    const max = $("#slider-range").slider("option", "max");
+    $("#slider-range").slider("values", [min, max]);
+    $("#amount").val("Rs." + min + "  Rs." + max);
+}

@@ -9,9 +9,100 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AdvancedSearchService {
+    public String getAdvancedSearchData(JsonObject requestObject) {
+        JsonObject responseObject = new JsonObject();
+        boolean status = false;
+        String message = "";
+
+        Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
+
+        StringBuilder hql = new StringBuilder("SELECT s FROM Stock s " +
+                "JOIN s.product p " +
+                "LEFT JOIN p.model m " +
+                "LEFT JOIN m.brand b " +
+                "LEFT JOIN p.quality q " +
+                "LEFT JOIN p.color c " +
+                "LEFT JOIN p.storage st " +
+                "WHERE 1=1 ");
+        Map<String, Object> params = new HashMap<>();
+        if (requestObject.has("brandName")) {
+            hql.append(" AND b.name=:brandName ");
+            params.put("brandName", requestObject.get("brandName").getAsString());
+        }
+
+        if (requestObject.has("conditionValue")) {
+            hql.append(" AND q.value=:conditionValue ");
+            params.put("conditionValue", requestObject.get("conditionValue").getAsString());
+        }
+
+        if (requestObject.has("colorValue")) {
+            hql.append(" AND c.value=:colorValue ");
+            params.put("colorValue", requestObject.get("colorValue").getAsString());
+        }
+
+        if (requestObject.has("storageValue")) {
+            hql.append(" AND st.value=:storageValue ");
+            params.put("storageValue", requestObject.get("storageValue").getAsString());
+        }
+
+        if (requestObject.has("priceStart") && requestObject.has("priceEnd")) {
+            hql.append(" AND s.price BETWEEN :priceStart AND :priceEnd ");
+            params.put("priceStart", requestObject.get("priceStart").getAsDouble());
+            params.put("priceEnd", requestObject.get("priceEnd").getAsDouble());
+        }
+
+        hql.append(" AND s.status.value=:approvedStatus ");
+        params.put("approvedStatus", String.valueOf(Status.Type.APPROVED));
+
+        // sorting
+        if (requestObject.has("sortValue")) {
+            String sortValue = requestObject.get("sortValue").getAsString();
+            switch (sortValue) {
+                case "Sort by Latest":
+                    hql.append(" ORDER BY s.createdAt DESC ");
+                    break;
+                case "Sort by Oldest":
+                    hql.append(" ORDER BY s.createdAt ASC ");
+                    break;
+                case "Sort by Name":
+                    hql.append(" ORDER BY p.title ASC ");
+                    break;
+                case "Sort by Price":
+                    hql.append(" ORDER BY s.price ASC ");
+                    break;
+            }
+        }
+
+        Query<Stock> query = hibernateSession.createQuery(hql.toString(), Stock.class);
+        params.forEach(query::setParameter);
+
+        if (requestObject.has("firstResult")) {
+            int firstResult = requestObject.get("firstResult").getAsInt();
+            query.setFirstResult(firstResult);
+            query.setMaxResults(AppUtil.MAX_RESULT_VALUE);
+        }
+
+        List<ProductDTO> productDTOList = generateProductDTO(hibernateSession, query);
+        responseObject.add("productList", AppUtil.GSON.toJsonTree(productDTOList));
+
+        String countHql = hql.toString().replace("SELECT s", "SELECT COUNT(s) ");
+        Query<Long> countQuery = hibernateSession.createQuery(countHql, Long.class);
+        params.forEach(countQuery::setParameter);
+        Long productCount = countQuery.getSingleResult();
+        responseObject.addProperty("allProductCount", productCount);
+
+        hibernateSession.close();
+        status = true;
+        responseObject.addProperty("status", status);
+        responseObject.addProperty("message", message);
+        return AppUtil.GSON.toJson(responseObject);
+    }
+
     public String getAllProductData() {
         JsonObject responseObject = new JsonObject();
         boolean status = false;
@@ -46,19 +137,7 @@ public class AdvancedSearchService {
         // get stock list
         stockQuery.setFirstResult(AppUtil.FIRST_RESULT_VALUE);
         stockQuery.setMaxResults(AppUtil.MAX_RESULT_VALUE); // Getting stocks from 0 to 10
-        List<Stock> stockList = stockQuery.getResultList(); // return 10 stocks
-
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        for (Stock stock : stockList) {
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setStockId(stock.getId());
-            productDTO.setTitle(stock.getProduct().getTitle());
-            productDTO.setPrice(stock.getPrice());
-            productDTO.setImages(stock.getProduct().getImages());
-            productDTOList.add(productDTO);
-        }
-
-        hibernateSession.close();
+        List<ProductDTO> productDTOList = generateProductDTO(hibernateSession, stockQuery);
 
         // attach value to response object
         responseObject.add("brandList", AppUtil.GSON.toJsonTree(brandList));
@@ -75,5 +154,20 @@ public class AdvancedSearchService {
         responseObject.addProperty("status", status);
         responseObject.addProperty("message", message);
         return AppUtil.GSON.toJson(responseObject);
+    }
+
+    private List<ProductDTO> generateProductDTO(Session hibernateSession, Query<Stock> stockQuery) {
+        List<Stock> stockList = stockQuery.getResultList(); // return 10 stocks
+
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        for (Stock stock : stockList) {
+            ProductDTO productDTO = new ProductDTO();
+            productDTO.setStockId(stock.getId());
+            productDTO.setTitle(stock.getProduct().getTitle());
+            productDTO.setPrice(stock.getPrice());
+            productDTO.setImages(stock.getProduct().getImages());
+            productDTOList.add(productDTO);
+        }
+        return productDTOList;
     }
 }
