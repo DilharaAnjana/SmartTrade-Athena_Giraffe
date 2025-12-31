@@ -111,7 +111,7 @@ public class CartService {
         return AppUtil.GSON.toJson(responseObject);
     }
 
-    private List<CartDTO> generateCartDTOs(List<Cart> cartList) {
+    public List<CartDTO> generateCartDTOs(List<Cart> cartList) {
         List<CartDTO> cartDTOList = new ArrayList<>();
         Session hibernateSession = HibernateUtil.getSessionFactory().openSession();
         for (Cart cart : cartList) {
