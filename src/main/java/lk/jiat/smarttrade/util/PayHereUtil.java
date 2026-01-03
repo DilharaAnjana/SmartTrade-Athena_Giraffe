@@ -62,7 +62,7 @@ public class PayHereUtil {
 
             StringBuilder sb = new StringBuilder();
             for (byte b : digest) {
-                sb.append(String.format("%02x", b));
+                sb.append("%02x".formatted(b));
             }
             return sb.toString();
 
