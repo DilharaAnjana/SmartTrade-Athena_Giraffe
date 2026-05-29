@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 public class Main {
 
     private static final int SERVER_PORT = 8080;
-    private static final String CONTEXT_PATH = "/smarttrade";
+    private static final String CONTEXT_PATH = "/neongear";
 
     public static void main(String[] args) {
         try {

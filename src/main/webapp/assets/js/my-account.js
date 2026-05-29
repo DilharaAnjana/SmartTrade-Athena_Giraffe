@@ -113,7 +113,7 @@ async function saveChanges() {
             const data = await response.json();
             if (data.status) {
                 Notiflix.Report.success(
-                    'SmartTrade',
+                    'NeonGear',
                     data.message,
                     'Okay'
                 );
@@ -152,7 +152,7 @@ async function loadUserData() {
 
             let replacedText = String(data.user.sinceAt).replace("-", " ");
             let since = replacedText.split(" ");
-            document.getElementById("since").innerHTML = `Smart Trade Member Since ${since[1]} ${since[0]}`;
+            document.getElementById("since").innerHTML = `NeonGear Member Since ${since[1]} ${since[0]}`;
             document.getElementById("firstName").value = data.user.firstName;
             document.getElementById("lastName").value = data.user.lastName;
             document.getElementById("lineOne").value = data.user.lineOne ? data.user.lineOne : "";
@@ -210,7 +210,7 @@ async function signOut() {
         });
         if (response.ok) {
             Notiflix.Report.success(
-                'SmartTrade',
+                'NeonGear',
                 "Logout successful",
                 'Okay', // button title
                 () => {
