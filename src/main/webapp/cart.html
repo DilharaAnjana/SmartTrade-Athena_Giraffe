@@ -4,17 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Smart Trade</title>
-    <meta name="robots" content="noindex, follow"/>
-    <meta name="description" content="">
+    <title>NeonGear | Shopping Cart</title>
+    <meta name="description" content="Review your gaming components cart at NeonGear.">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
 
-    <!-- CSS
-    ============================================ -->
-
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/vendor/font-awesome.css">
     <link rel="stylesheet" href="assets/css/vendor/flaticon/flaticon.css">
@@ -25,7 +19,7 @@
     <link rel="stylesheet" href="assets/css/vendor/magnific-popup.css">
     <link rel="stylesheet" href="assets/css/vendor/base.css">
     <link rel="stylesheet" href="assets/css/style.min.css">
-
+    <link rel="stylesheet" href="assets/css/gaming.css">
     <link rel="stylesheet" href="assets/css/notification.css">
     <script src="assets/js/header.js"></script>
     <script src="assets/js/footer.js"></script>
@@ -52,8 +46,12 @@
         <div class="container">
             <div class="axil-product-cart-wrap">
                 <div class="product-table-heading">
-                    <h4 class="title">Your Cart</h4>
-                    <a href="#" class="cart-clear">Clear Shoping Cart</a>
+                    <h4 class="title" style="font-family:'Orbitron',monospace;background:linear-gradient(135deg,#00ff88,#00b4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+                        <i class="fas fa-shopping-cart" style="-webkit-text-fill-color:#00ff88;margin-right:10px;font-size:20px;"></i>Your Cart
+                    </h4>
+                    <a href="#" class="cart-clear" style="color:#ff2d78 !important;font-size:13px;font-family:'Rajdhani',sans-serif;letter-spacing:0.05em;border:1px solid rgba(255,45,120,0.3);padding:6px 16px;border-radius:6px;">
+                        <i class="fas fa-trash-alt" style="margin-right:4px;"></i>Clear Cart
+                    </a>
                 </div>
                 <div class="table-responsive">
                     <table class="table axil-product-table axil-cart-table mb--40">
@@ -109,7 +107,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <a href="checkout.html" class="axil-btn btn-bg-primary checkout-btn">Process to Checkout</a>
+                            <a href="checkout.html" class="axil-btn btn-bg-primary checkout-btn" style="width:100%;text-align:center;display:block;margin-top:16px;">
+                                <i class="fas fa-bolt" style="margin-right:6px;"></i>Proceed to Checkout
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -121,51 +121,31 @@
 </main>
 
 
-<div class="service-area">
+<div class="axil-why-choose-area pb--50 pb_sm--30">
     <div class="container">
         <div class="row row-cols-xl-4 row-cols-sm-2 row-cols-1 row--20">
             <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img src="assets/images/icons/service1.png" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Fast &amp; Secure Delivery</h6>
-                        <p>Tell about your service.</p>
-                    </div>
+                <div class="service-box">
+                    <div class="icon" style="font-size:32px;margin-bottom:4px;">🚀</div>
+                    <h6 class="title">Fast &amp; Secure Delivery</h6>
                 </div>
             </div>
             <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img src="assets/images/icons/service2.png" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Money Back Guarantee</h6>
-                        <p>Within 10 days.</p>
-                    </div>
+                <div class="service-box">
+                    <div class="icon" style="font-size:32px;margin-bottom:4px;">🛡️</div>
+                    <h6 class="title">30-Day Money Back</h6>
                 </div>
             </div>
             <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img src="assets/images/icons/service3.png" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">24 Hour Return Policy</h6>
-                        <p>No question ask.</p>
-                    </div>
+                <div class="service-box">
+                    <div class="icon" style="font-size:32px;margin-bottom:4px;">🔒</div>
+                    <h6 class="title">Secure Checkout</h6>
                 </div>
             </div>
             <div class="col">
-                <div class="service-box service-style-2">
-                    <div class="icon">
-                        <img src="assets/images/icons/service4.png" alt="Service">
-                    </div>
-                    <div class="content">
-                        <h6 class="title">Pro Quality Support</h6>
-                        <p>24/7 Live support.</p>
-                    </div>
+                <div class="service-box">
+                    <div class="icon" style="font-size:32px;margin-bottom:4px;">💬</div>
+                    <h6 class="title">24/7 Expert Support</h6>
                 </div>
             </div>
         </div>

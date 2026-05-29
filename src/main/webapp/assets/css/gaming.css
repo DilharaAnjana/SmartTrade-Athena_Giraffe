@@ -1,0 +1,2011 @@
+/* ============================================
+   NEONGEAR - Gaming Components Store
+   Custom Dark Neon Gaming Theme
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --ng-bg-primary: #070710;
+  --ng-bg-secondary: #0d0d1a;
+  --ng-bg-card: #12121f;
+  --ng-bg-card-hover: #1a1a2e;
+  --ng-neon-green: #00ff88;
+  --ng-neon-blue: #00b4ff;
+  --ng-neon-purple: #6c5ce7;
+  --ng-neon-orange: #ff6b35;
+  --ng-neon-pink: #ff2d78;
+  --ng-text-primary: #e8e8f0;
+  --ng-text-secondary: #8888aa;
+  --ng-text-muted: #555570;
+  --ng-border: rgba(0, 255, 136, 0.15);
+  --ng-border-bright: rgba(0, 255, 136, 0.5);
+  --ng-glow-green: 0 0 20px rgba(0, 255, 136, 0.4);
+  --ng-glow-blue: 0 0 20px rgba(0, 180, 255, 0.4);
+  --ng-glow-purple: 0 0 20px rgba(108, 92, 231, 0.4);
+  --ng-gradient-primary: linear-gradient(135deg, #00ff88, #00b4ff);
+  --ng-gradient-secondary: linear-gradient(135deg, #6c5ce7, #ff2d78);
+  --ng-gradient-dark: linear-gradient(180deg, #070710, #0d0d1a);
+  --ng-font-display: 'Orbitron', monospace;
+  --ng-font-body: 'Rajdhani', sans-serif;
+  --ng-font-ui: 'Inter', sans-serif;
+  --ng-radius: 8px;
+  --ng-radius-lg: 16px;
+  --ng-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   BASE RESET & GLOBALS
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--ng-bg-primary) !important;
+  color: var(--ng-text-primary) !important;
+  font-family: var(--ng-font-body) !important;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Override white backgrounds */
+.bg-color-white,
+.axil-main-slider-area,
+.axil-categorie-area,
+.axil-product-area,
+.axil-shop-area,
+.axil-single-product-area,
+.axil-checkout-area,
+.axil-signin-area {
+  background-color: var(--ng-bg-primary) !important;
+}
+
+.main-wrapper {
+  background-color: var(--ng-bg-primary) !important;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--ng-bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--ng-neon-green); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ng-neon-blue); }
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--ng-font-display) !important;
+  color: var(--ng-text-primary) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+p, span, a, li, label, input, select, textarea {
+  font-family: var(--ng-font-body) !important;
+}
+
+a {
+  color: var(--ng-neon-green) !important;
+  text-decoration: none !important;
+  transition: color var(--ng-transition);
+}
+
+a:hover {
+  color: var(--ng-neon-blue) !important;
+}
+
+/* ============================================
+   HEADER TOP BAR
+   ============================================ */
+.axil-header-top {
+  background: linear-gradient(90deg, #070710, #0d0d1a, #070710) !important;
+  border-bottom: 1px solid var(--ng-border) !important;
+  padding: 8px 0 !important;
+}
+
+.axil-header-top .dropdown-toggle {
+  color: var(--ng-text-secondary) !important;
+  background: transparent !important;
+  border: none !important;
+  font-family: var(--ng-font-ui) !important;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+
+.axil-header-top .dropdown-menu {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  box-shadow: var(--ng-glow-green) !important;
+}
+
+.axil-header-top .dropdown-item {
+  color: var(--ng-text-secondary) !important;
+}
+
+.axil-header-top .dropdown-item:hover {
+  background: rgba(0, 255, 136, 0.1) !important;
+  color: var(--ng-neon-green) !important;
+}
+
+.header-top-link .quick-link li a {
+  color: var(--ng-text-secondary) !important;
+  font-size: 12px;
+  font-family: var(--ng-font-ui) !important;
+  letter-spacing: 0.03em;
+  transition: color var(--ng-transition);
+}
+
+.header-top-link .quick-link li a:hover {
+  color: var(--ng-neon-green) !important;
+}
+
+/* ============================================
+   MAIN HEADER / NAVBAR
+   ============================================ */
+.axil-mainmenu {
+  background: rgba(7, 7, 16, 0.97) !important;
+  border-bottom: 1px solid var(--ng-border) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 14px 0 !important;
+}
+
+.axil-mainmenu.axil-sticky {
+  background: rgba(7, 7, 16, 0.99) !important;
+  box-shadow: 0 4px 30px rgba(0, 255, 136, 0.1) !important;
+}
+
+/* Logo styling */
+.header-brand .logo img {
+  filter: brightness(1.2);
+  max-height: 44px;
+}
+
+/* Logo text replacement - will show brand name as text */
+.ng-logo-text {
+  font-family: var(--ng-font-display) !important;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  background: var(--ng-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none !important;
+  display: inline-block;
+  line-height: 1;
+}
+
+.ng-logo-text .logo-sub {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  display: block;
+  background: none;
+  -webkit-text-fill-color: var(--ng-text-secondary);
+  color: var(--ng-text-secondary);
+  margin-top: 2px;
+}
+
+/* Navigation Links */
+.mainmenu > li > a {
+  color: var(--ng-text-primary) !important;
+  font-family: var(--ng-font-body) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 8px 16px !important;
+  transition: all var(--ng-transition) !important;
+  position: relative;
+}
+
+.mainmenu > li > a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--ng-gradient-primary);
+  transition: width var(--ng-transition);
+  border-radius: 2px;
+  box-shadow: var(--ng-glow-green);
+}
+
+.mainmenu > li > a:hover,
+.mainmenu > li.active > a {
+  color: var(--ng-neon-green) !important;
+}
+
+.mainmenu > li > a:hover::after {
+  width: 80%;
+}
+
+/* Submenu */
+.axil-submenu {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-top: 2px solid var(--ng-neon-green) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), var(--ng-glow-green) !important;
+  border-radius: 0 0 var(--ng-radius) var(--ng-radius) !important;
+  min-width: 200px !important;
+}
+
+.axil-submenu li a {
+  color: var(--ng-text-secondary) !important;
+  font-family: var(--ng-font-body) !important;
+  font-size: 13px !important;
+  letter-spacing: 0.05em;
+  padding: 10px 20px !important;
+  display: block;
+  border-bottom: 1px solid rgba(255,255,255,0.04) !important;
+  transition: all var(--ng-transition);
+}
+
+.axil-submenu li a:hover {
+  background: rgba(0, 255, 136, 0.08) !important;
+  color: var(--ng-neon-green) !important;
+  padding-left: 26px !important;
+}
+
+/* Header Action Icons */
+.header-action .action-list li a {
+  color: var(--ng-text-primary) !important;
+  transition: color var(--ng-transition);
+}
+
+.header-action .action-list li a:hover {
+  color: var(--ng-neon-green) !important;
+}
+
+.header-action .action-list .flaticon-shopping-cart::before,
+.header-action .action-list .flaticon-heart::before,
+.header-action .action-list .flaticon-person::before,
+.header-action .action-list .flaticon-magnifying-glass::before,
+.header-action .action-list .flaticon-menu-2::before {
+  color: var(--ng-text-primary);
+  font-size: 20px;
+}
+
+.cart-count {
+  background: var(--ng-neon-green) !important;
+  color: #000 !important;
+  font-weight: 700 !important;
+  font-size: 11px !important;
+  width: 20px !important;
+  height: 20px !important;
+  line-height: 20px !important;
+  border-radius: 50% !important;
+  box-shadow: var(--ng-glow-green) !important;
+}
+
+/* My Account Dropdown */
+.my-account-dropdown {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-top: 2px solid var(--ng-neon-green) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8) !important;
+}
+
+.my-account-dropdown .title {
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.2em;
+}
+
+.my-account-dropdown ul li a {
+  color: var(--ng-text-secondary) !important;
+}
+
+.my-account-dropdown ul li a:hover {
+  color: var(--ng-neon-green) !important;
+}
+
+.my-account-dropdown .reg-footer {
+  color: var(--ng-text-muted) !important;
+  border-top: 1px solid var(--ng-border) !important;
+  padding-top: 10px;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.axil-btn {
+  font-family: var(--ng-font-display) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  border-radius: var(--ng-radius) !important;
+  padding: 12px 28px !important;
+  transition: all var(--ng-transition) !important;
+  border: none !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-bg-primary {
+  background: var(--ng-gradient-primary) !important;
+  color: #000 !important;
+  box-shadow: var(--ng-glow-green) !important;
+}
+
+.btn-bg-primary:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.7) !important;
+  transform: translateY(-2px) !important;
+  color: #000 !important;
+}
+
+.btn-bg-secondary {
+  background: var(--ng-gradient-secondary) !important;
+  color: #fff !important;
+  box-shadow: var(--ng-glow-purple) !important;
+}
+
+.btn-bg-secondary:hover {
+  box-shadow: 0 0 30px rgba(108, 92, 231, 0.7) !important;
+  transform: translateY(-2px) !important;
+  color: #fff !important;
+}
+
+.btn-bg-white,
+.btn-bg-lighter {
+  background: transparent !important;
+  color: var(--ng-neon-green) !important;
+  border: 2px solid var(--ng-neon-green) !important;
+}
+
+.btn-bg-white:hover,
+.btn-bg-lighter:hover {
+  background: var(--ng-neon-green) !important;
+  color: #000 !important;
+  box-shadow: var(--ng-glow-green) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-load-more {
+  border: 2px solid var(--ng-border-bright) !important;
+  color: var(--ng-neon-green) !important;
+  background: transparent !important;
+  padding: 14px 48px !important;
+}
+
+.btn-load-more:hover {
+  background: var(--ng-neon-green) !important;
+  color: #000 !important;
+  box-shadow: var(--ng-glow-green) !important;
+}
+
+/* ============================================
+   HERO SLIDER
+   ============================================ */
+.axil-main-slider-area {
+  background: linear-gradient(135deg, #070710 0%, #0d0d1a 50%, #070710 100%) !important;
+  min-height: 580px;
+  display: flex;
+  align-items: center;
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.axil-main-slider-area::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 180, 255, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Grid overlay effect */
+.axil-main-slider-area::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+
+.main-slider-content .subtitle {
+  background: linear-gradient(90deg, var(--ng-neon-green), var(--ng-neon-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: var(--ng-font-body) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.main-slider-content .subtitle i {
+  -webkit-text-fill-color: var(--ng-neon-orange);
+  margin-right: 6px;
+}
+
+.main-slider-content .title {
+  font-family: var(--ng-font-display) !important;
+  font-size: 52px !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: var(--ng-text-primary) !important;
+  text-shadow: 0 0 40px rgba(0, 255, 136, 0.2);
+  margin-bottom: 32px;
+}
+
+.main-slider-large-thumb {
+  position: relative;
+  z-index: 1;
+}
+
+.main-slider-large-thumb img {
+  filter: drop-shadow(0 0 30px rgba(0, 180, 255, 0.3));
+  transition: filter var(--ng-transition);
+}
+
+.main-slider-large-thumb img:hover {
+  filter: drop-shadow(0 0 50px rgba(0, 255, 136, 0.4));
+}
+
+.product-price {
+  background: rgba(7, 7, 16, 0.85);
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius);
+  padding: 10px 16px;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+  margin-top: 10px;
+}
+
+.product-price .text {
+  color: var(--ng-text-secondary) !important;
+  font-size: 12px !important;
+  font-family: var(--ng-font-ui) !important;
+}
+
+.product-price .price-amount {
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+}
+
+/* ============================================
+   SECTION TITLES
+   ============================================ */
+.section-title-wrapper {
+  margin-bottom: 40px;
+}
+
+.title-highlighter {
+  font-family: var(--ng-font-body) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 12px;
+}
+
+.highlighter-primary {
+  background: rgba(0, 255, 136, 0.1) !important;
+  color: var(--ng-neon-green) !important;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.highlighter-secondary {
+  background: rgba(108, 92, 231, 0.1) !important;
+  color: #a29bfe !important;
+  border: 1px solid rgba(108, 92, 231, 0.3);
+}
+
+.section-title-wrapper .title {
+  font-size: 32px !important;
+  background: linear-gradient(135deg, var(--ng-text-primary), var(--ng-text-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 !important;
+}
+
+/* ============================================
+   CATEGORY / BRAND CARDS
+   ============================================ */
+.axil-categorie-area {
+  padding: 60px 0;
+  position: relative;
+}
+
+.categrie-product {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  padding: 24px 16px !important;
+  text-align: center;
+  transition: all var(--ng-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.categrie-product::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--ng-gradient-primary);
+  transform: scaleX(0);
+  transition: transform var(--ng-transition);
+}
+
+.categrie-product:hover {
+  background: var(--ng-bg-card-hover) !important;
+  border-color: var(--ng-border-bright) !important;
+  box-shadow: var(--ng-glow-green), 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+  transform: translateY(-4px);
+}
+
+.categrie-product:hover::before {
+  transform: scaleX(1);
+}
+
+.categrie-product img {
+  filter: grayscale(30%) brightness(0.9);
+  transition: filter var(--ng-transition);
+  max-height: 60px;
+  object-fit: contain;
+}
+
+.categrie-product:hover img {
+  filter: grayscale(0%) brightness(1.1) drop-shadow(0 0 10px rgba(0, 255, 136, 0.3));
+}
+
+.cat-title {
+  color: var(--ng-text-primary) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  margin-top: 12px !important;
+  word-break: keep-all !important;
+  hyphens: none !important;
+  white-space: nowrap !important;
+}
+
+.categrie-product:hover .cat-title {
+  color: var(--ng-neon-green) !important;
+}
+
+/* ============================================
+   PRODUCT CARDS
+   ============================================ */
+.axil-product {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  overflow: hidden;
+  transition: all var(--ng-transition) !important;
+  position: relative;
+}
+
+.axil-product:hover {
+  border-color: var(--ng-border-bright) !important;
+  box-shadow: var(--ng-glow-green), 0 16px 48px rgba(0, 0, 0, 0.5) !important;
+  transform: translateY(-6px) !important;
+}
+
+.axil-product .thumbnail {
+  background: var(--ng-bg-secondary) !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.axil-product .thumbnail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(7, 7, 16, 0.8) 100%);
+  pointer-events: none;
+}
+
+.axil-product .thumbnail img {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  padding: 16px;
+}
+
+.axil-product:hover .thumbnail img.main-img {
+  transform: scale(1.08) !important;
+}
+
+.product-hover-action {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  opacity: 0;
+  transition: all var(--ng-transition);
+  transform: translateY(10px);
+  padding: 12px;
+  background: linear-gradient(0deg, rgba(7, 7, 16, 0.95) 0%, transparent 100%);
+}
+
+.axil-product:hover .product-hover-action {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cart-action {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.cart-action li a {
+  background: rgba(0, 255, 136, 0.1) !important;
+  border: 1px solid rgba(0, 255, 136, 0.3) !important;
+  color: var(--ng-neon-green) !important;
+  padding: 8px 14px !important;
+  border-radius: var(--ng-radius) !important;
+  font-family: var(--ng-font-body) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  transition: all var(--ng-transition) !important;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cart-action li.select-option a {
+  background: var(--ng-gradient-primary) !important;
+  border-color: transparent !important;
+  color: #000 !important;
+  flex: 1;
+  justify-content: center;
+}
+
+.cart-action li a:hover {
+  background: rgba(0, 255, 136, 0.2) !important;
+  box-shadow: var(--ng-glow-green) !important;
+  transform: translateY(-2px);
+}
+
+.cart-action li.select-option a:hover {
+  box-shadow: var(--ng-glow-green) !important;
+  transform: translateY(-2px);
+  color: #000 !important;
+}
+
+.product-content {
+  padding: 16px !important;
+}
+
+.product-content .title a {
+  color: var(--ng-text-primary) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1.4 !important;
+  transition: color var(--ng-transition) !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-content .title a:hover {
+  color: var(--ng-neon-green) !important;
+}
+
+.price.current-price {
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.price.old-price {
+  color: var(--ng-text-muted) !important;
+  font-size: 13px !important;
+  text-decoration: line-through !important;
+}
+
+/* Stock / Badge */
+.product-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  background: var(--ng-neon-orange);
+  color: #000;
+  font-family: var(--ng-font-display) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* Color Variant */
+.color-variant {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+
+.color-variant li {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--ng-border);
+  cursor: pointer;
+  transition: all var(--ng-transition);
+}
+
+.color-variant li.active,
+.color-variant li:hover {
+  border-color: var(--ng-neon-green);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+}
+
+/* ============================================
+   WHY CHOOSE US / SERVICE BOXES
+   ============================================ */
+.axil-why-choose-area {
+  background: var(--ng-bg-secondary) !important;
+  padding: 60px 0;
+  border-top: 1px solid var(--ng-border);
+  border-bottom: 1px solid var(--ng-border);
+}
+
+.service-box {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  padding: 28px 20px !important;
+  text-align: center;
+  transition: all var(--ng-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.service-box::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--ng-gradient-primary);
+  transform: scaleX(0);
+  transition: transform var(--ng-transition);
+}
+
+.service-box:hover {
+  background: var(--ng-bg-card-hover) !important;
+  border-color: var(--ng-border-bright) !important;
+  transform: translateY(-4px);
+  box-shadow: var(--ng-glow-green);
+}
+
+.service-box:hover::before {
+  transform: scaleX(1);
+}
+
+.service-box .icon img {
+  filter: brightness(0.8) saturate(0.5);
+  transition: filter var(--ng-transition);
+  height: 48px;
+  object-fit: contain;
+}
+
+.service-box:hover .icon img {
+  filter: brightness(1.2) saturate(1) drop-shadow(0 0 8px rgba(0, 255, 136, 0.4));
+}
+
+.service-box .title {
+  color: var(--ng-text-primary) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  margin-top: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.axil-footer-area {
+  background: var(--ng-bg-secondary) !important;
+  border-top: 1px solid var(--ng-border);
+}
+
+.footer-top {
+  background: var(--ng-bg-secondary) !important;
+  padding: 60px 0 40px;
+}
+
+.axil-footer-widget .widget-title {
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 20px !important;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ng-border);
+}
+
+.axil-footer-widget .inner ul li a {
+  color: var(--ng-text-secondary) !important;
+  font-size: 14px;
+  padding: 4px 0;
+  display: block;
+  transition: all var(--ng-transition);
+}
+
+.axil-footer-widget .inner ul li a:hover {
+  color: var(--ng-neon-green) !important;
+  padding-left: 8px;
+}
+
+.support-list-item li a {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px;
+}
+
+.support-list-item li a i {
+  color: var(--ng-neon-green);
+  font-size: 14px;
+}
+
+.copyright-area {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-top: 1px solid var(--ng-border) !important;
+  padding: 20px 0;
+}
+
+.copyright-left .quick-link li,
+.copyright-left .quick-link li a {
+  color: var(--ng-text-muted) !important;
+  font-size: 13px;
+}
+
+.copyright-left .quick-link li a:hover {
+  color: var(--ng-neon-green) !important;
+}
+
+.social-share a {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--ng-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ng-text-secondary) !important;
+  margin-right: 8px;
+  transition: all var(--ng-transition);
+  font-size: 14px;
+}
+
+.social-share a:hover {
+  border-color: var(--ng-neon-green);
+  color: var(--ng-neon-green) !important;
+  box-shadow: var(--ng-glow-green);
+  transform: translateY(-2px);
+}
+
+.payment-icons-bottom li img {
+  filter: grayscale(80%) brightness(0.7);
+  transition: filter var(--ng-transition);
+  height: 28px;
+}
+
+.payment-icons-bottom li img:hover {
+  filter: grayscale(0%) brightness(1);
+}
+
+/* ============================================
+   SEARCH MODAL
+   ============================================ */
+.header-search-modal {
+  background: var(--ng-bg-card) !important;
+  border-left: 1px solid var(--ng-border) !important;
+  box-shadow: -4px 0 32px rgba(0, 0, 0, 0.8) !important;
+}
+
+.header-search-modal .form-control {
+  background: var(--ng-bg-secondary) !important;
+  border: 1px solid var(--ng-border) !important;
+  color: var(--ng-text-primary) !important;
+  font-family: var(--ng-font-body) !important;
+}
+
+.header-search-modal .form-control:focus {
+  border-color: var(--ng-neon-green) !important;
+  box-shadow: var(--ng-glow-green) !important;
+  outline: none;
+}
+
+.header-search-modal .form-control::placeholder {
+  color: var(--ng-text-muted) !important;
+}
+
+.search-result-header .title {
+  color: var(--ng-text-secondary) !important;
+  font-size: 13px !important;
+  text-transform: none !important;
+  font-family: var(--ng-font-ui) !important;
+}
+
+.search-result-header .view-all {
+  color: var(--ng-neon-green) !important;
+  font-size: 12px;
+}
+
+.axil-product-list {
+  background: var(--ng-bg-secondary) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius) !important;
+  padding: 12px !important;
+  margin-bottom: 8px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.axil-product-list .thumbnail img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.axil-product-list .product-title a {
+  color: var(--ng-text-primary) !important;
+  font-size: 13px !important;
+}
+
+/* ============================================
+   CART SIDEBAR
+   ============================================ */
+.cart-dropdown {
+  background: var(--ng-bg-card) !important;
+  border-left: 1px solid var(--ng-border) !important;
+  box-shadow: -4px 0 32px rgba(0, 0, 0, 0.8) !important;
+}
+
+.cart-header {
+  background: var(--ng-bg-secondary) !important;
+  border-bottom: 1px solid var(--ng-border) !important;
+  padding: 20px !important;
+}
+
+.cart-header .header-title {
+  color: var(--ng-neon-green) !important;
+  font-size: 16px !important;
+  letter-spacing: 0.1em;
+}
+
+.cart-body {
+  background: var(--ng-bg-card) !important;
+}
+
+.cart-item-list li {
+  border-bottom: 1px solid var(--ng-border) !important;
+  padding: 16px !important;
+}
+
+.cart-item-list .cart-title a {
+  color: var(--ng-text-primary) !important;
+  font-size: 13px !important;
+}
+
+.cart-item-list .cart-price span {
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-weight: 700 !important;
+}
+
+.cart-footer {
+  background: var(--ng-bg-secondary) !important;
+  border-top: 1px solid var(--ng-border) !important;
+  padding: 20px !important;
+}
+
+.cart-subtotal .subtotal-title {
+  color: var(--ng-text-secondary) !important;
+  font-family: var(--ng-font-body) !important;
+  font-size: 14px !important;
+}
+
+.cart-subtotal .subtotal-amount {
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+}
+
+/* ============================================
+   SHOP / SEARCH PAGE
+   ============================================ */
+.axil-shop-sidebar {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  padding: 24px !important;
+}
+
+.toggle-list .title {
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ng-border) !important;
+  margin-bottom: 12px !important;
+}
+
+.shop-submenu ul li a {
+  color: var(--ng-text-secondary) !important;
+  font-size: 14px;
+  padding: 6px 0;
+  display: block;
+  transition: color var(--ng-transition);
+}
+
+.shop-submenu ul li a:hover,
+.shop-submenu ul li.current-cat a,
+.shop-submenu ul li.chosen a {
+  color: var(--ng-neon-green) !important;
+}
+
+.shop-submenu ul li.current-cat::before {
+  content: '▸';
+  color: var(--ng-neon-green);
+  margin-right: 6px;
+}
+
+/* Price Range Slider */
+#slider-range {
+  background: var(--ng-bg-secondary) !important;
+  border: none !important;
+  height: 4px !important;
+  border-radius: 2px;
+}
+
+#slider-range .ui-slider-range {
+  background: var(--ng-gradient-primary) !important;
+}
+
+#slider-range .ui-slider-handle {
+  background: var(--ng-neon-green) !important;
+  border: 2px solid #000 !important;
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 50% !important;
+  top: -6px !important;
+  box-shadow: var(--ng-glow-green) !important;
+}
+
+.amount-range {
+  background: var(--ng-bg-secondary) !important;
+  border: 1px solid var(--ng-border) !important;
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 13px !important;
+  border-radius: var(--ng-radius) !important;
+  text-align: center;
+  padding: 8px 12px;
+  width: 100%;
+}
+
+/* Sort Select */
+.single-select {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  color: var(--ng-text-secondary) !important;
+  font-family: var(--ng-font-body) !important;
+  border-radius: var(--ng-radius) !important;
+  padding: 10px 16px;
+  font-size: 13px;
+}
+
+.filter-results {
+  color: var(--ng-text-secondary) !important;
+  font-size: 13px;
+  font-family: var(--ng-font-body) !important;
+}
+
+/* ============================================
+   SINGLE PRODUCT PAGE
+   ============================================ */
+.single-product-thumbnail img {
+  border-radius: var(--ng-radius-lg);
+  background: var(--ng-bg-card);
+  padding: 16px;
+  filter: drop-shadow(0 0 20px rgba(0, 180, 255, 0.2));
+}
+
+.product-small-thumb-3 .thumbnail {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius) !important;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all var(--ng-transition);
+}
+
+.product-small-thumb-3 .thumbnail:hover,
+.product-small-thumb-3 .thumbnail.slick-current {
+  border-color: var(--ng-neon-green) !important;
+  box-shadow: var(--ng-glow-green) !important;
+}
+
+.single-product-content .product-title {
+  font-family: var(--ng-font-display) !important;
+  font-size: 26px !important;
+  color: var(--ng-text-primary) !important;
+  line-height: 1.2 !important;
+  margin-bottom: 16px;
+}
+
+.single-product-content .rating-icon i {
+  color: var(--ng-neon-orange) !important;
+}
+
+.single-product-content .price-amount {
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 32px !important;
+  font-weight: 700 !important;
+}
+
+.single-product-content .old-price {
+  color: var(--ng-text-muted) !important;
+  text-decoration: line-through;
+}
+
+.single-product-content p,
+.single-product-content .descrip {
+  color: var(--ng-text-secondary) !important;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* Quantity selector */
+.cart-group .product-quantity-action {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius) !important;
+  display: inline-flex;
+  align-items: center;
+}
+
+.cart-group .quantity-btn,
+.cart-group .quantity-input {
+  background: transparent !important;
+  border: none !important;
+  color: var(--ng-text-primary) !important;
+  font-family: var(--ng-font-display) !important;
+  width: 40px;
+  height: 44px;
+  text-align: center;
+}
+
+.cart-group .quantity-btn:hover {
+  color: var(--ng-neon-green) !important;
+}
+
+/* Tabs */
+.axil-tab-list .nav-link {
+  color: var(--ng-text-secondary) !important;
+  background: transparent !important;
+  border: none !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  padding: 12px 24px !important;
+  border-bottom: 2px solid transparent !important;
+  transition: all var(--ng-transition) !important;
+  text-transform: uppercase;
+}
+
+.axil-tab-list .nav-link.active,
+.axil-tab-list .nav-link:hover {
+  color: var(--ng-neon-green) !important;
+  border-bottom-color: var(--ng-neon-green) !important;
+}
+
+/* ============================================
+   CART PAGE
+   ============================================ */
+.cart-table-head,
+.axil-table thead th {
+  background: var(--ng-bg-card) !important;
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  border-color: var(--ng-border) !important;
+}
+
+.axil-table td {
+  background: var(--ng-bg-secondary) !important;
+  border-color: var(--ng-border) !important;
+  color: var(--ng-text-primary) !important;
+  vertical-align: middle;
+}
+
+.cart-order-summary {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  padding: 24px !important;
+}
+
+.cart-order-summary .title {
+  color: var(--ng-neon-green) !important;
+  font-size: 16px !important;
+  border-bottom: 1px solid var(--ng-border) !important;
+  padding-bottom: 16px !important;
+  margin-bottom: 20px !important;
+}
+
+.cart-order-summary .order-summary-content li {
+  border-bottom: 1px solid var(--ng-border) !important;
+  padding: 12px 0 !important;
+  color: var(--ng-text-secondary) !important;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-order-summary .order-summary-content .order-total {
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+}
+
+/* ============================================
+   CHECKOUT PAGE
+   ============================================ */
+.axil-checkout-billing {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  padding: 32px !important;
+}
+
+.axil-checkout-billing .title {
+  color: var(--ng-neon-green) !important;
+  font-size: 18px !important;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ng-border) !important;
+  margin-bottom: 24px !important;
+}
+
+.axil-checkout-order {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  padding: 32px !important;
+}
+
+.axil-checkout-order .title {
+  color: var(--ng-neon-green) !important;
+  font-size: 18px !important;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ng-border);
+  margin-bottom: 24px !important;
+}
+
+/* ============================================
+   FORMS
+   ============================================ */
+.form-control,
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: var(--ng-bg-secondary) !important;
+  border: 1px solid var(--ng-border) !important;
+  color: var(--ng-text-primary) !important;
+  font-family: var(--ng-font-body) !important;
+  border-radius: var(--ng-radius) !important;
+  padding: 12px 16px !important;
+  transition: all var(--ng-transition) !important;
+  font-size: 15px !important;
+}
+
+.form-control:focus,
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--ng-neon-green) !important;
+  box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1) !important;
+  outline: none !important;
+  background: rgba(0, 255, 136, 0.03) !important;
+}
+
+.form-control::placeholder,
+.form-group input::placeholder {
+  color: var(--ng-text-muted) !important;
+}
+
+.form-group label {
+  color: var(--ng-text-secondary) !important;
+  font-family: var(--ng-font-body) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 8px !important;
+  display: block;
+}
+
+/* ============================================
+   SIGN IN / SIGN UP PAGES
+   ============================================ */
+.axil-signin-area {
+  min-height: 100vh;
+  background: var(--ng-bg-primary) !important;
+}
+
+.signin-header {
+  background: var(--ng-bg-secondary) !important;
+  border-bottom: 1px solid var(--ng-border) !important;
+  padding: 16px 40px !important;
+}
+
+.axil-signin-banner {
+  background: linear-gradient(135deg, #070710, #0d0d1a) !important;
+  border-right: 1px solid var(--ng-border) !important;
+  min-height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.axil-signin-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(0, 255, 136, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse at 70% 80%, rgba(108, 92, 231, 0.08) 0%, transparent 70%);
+}
+
+.axil-signin-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 136, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.axil-signin-banner .title {
+  color: var(--ng-text-primary) !important;
+  font-size: 36px !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  z-index: 1;
+  position: relative;
+  text-align: center;
+  text-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
+}
+
+.axil-signin-form-wrap {
+  display: flex;
+  align-items: center;
+  min-height: calc(100vh - 70px);
+  padding: 40px;
+}
+
+.axil-signin-form {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  padding: 40px !important;
+  width: 100%;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+.axil-signin-form::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--ng-gradient-primary);
+  border-radius: var(--ng-radius-lg) var(--ng-radius-lg) 0 0;
+}
+
+.axil-signin-form .title {
+  color: var(--ng-text-primary) !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+}
+
+.axil-signin-form .b2 {
+  color: var(--ng-text-secondary) !important;
+  font-size: 14px !important;
+  margin-bottom: 24px !important;
+}
+
+.singin-header-btn p {
+  color: var(--ng-text-secondary) !important;
+  font-size: 14px;
+}
+
+.forgot-btn {
+  color: var(--ng-neon-blue) !important;
+  font-size: 13px !important;
+  font-family: var(--ng-font-body) !important;
+}
+
+.forgot-btn:hover {
+  color: var(--ng-neon-green) !important;
+}
+
+/* ============================================
+   MY ACCOUNT PAGE
+   ============================================ */
+.axil-dashboard-area {
+  background: var(--ng-bg-primary) !important;
+  padding: 60px 0;
+}
+
+.axil-dashboard-sidebar {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  overflow: hidden;
+}
+
+.dashboard-nav li a {
+  color: var(--ng-text-secondary) !important;
+  font-family: var(--ng-font-body) !important;
+  padding: 14px 20px !important;
+  border-bottom: 1px solid var(--ng-border) !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all var(--ng-transition);
+}
+
+.dashboard-nav li a:hover,
+.dashboard-nav li a.active {
+  background: rgba(0, 255, 136, 0.08) !important;
+  color: var(--ng-neon-green) !important;
+  border-left: 3px solid var(--ng-neon-green);
+}
+
+.axil-dashboard-content {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  padding: 32px !important;
+}
+
+/* ============================================
+   INVOICE PAGE
+   ============================================ */
+.axil-invoice-area {
+  background: var(--ng-bg-primary) !important;
+  padding: 60px 0;
+}
+
+.invoice-wrapper {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  padding: 40px !important;
+}
+
+/* ============================================
+   BACK TO TOP
+   ============================================ */
+.back-to-top {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  color: var(--ng-neon-green) !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all var(--ng-transition) !important;
+  box-shadow: var(--ng-glow-green) !important;
+}
+
+.back-to-top:hover {
+  background: var(--ng-neon-green) !important;
+  color: #000 !important;
+  transform: translateY(-4px) !important;
+}
+
+/* ============================================
+   SLICK SLIDER OVERRIDES
+   ============================================ */
+.slick-dots li button::before {
+  color: var(--ng-text-muted) !important;
+  font-size: 8px !important;
+}
+
+.slick-dots li.slick-active button::before {
+  color: var(--ng-neon-green) !important;
+}
+
+.slick-prev::before, .slick-next::before {
+  color: var(--ng-neon-green) !important;
+}
+
+.axil-slick-arrow .slick-arrow {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  color: var(--ng-text-primary) !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  transition: all var(--ng-transition) !important;
+}
+
+.axil-slick-arrow .slick-arrow:hover {
+  background: var(--ng-neon-green) !important;
+  border-color: var(--ng-neon-green) !important;
+  color: #000 !important;
+  box-shadow: var(--ng-glow-green) !important;
+}
+
+/* ============================================
+   SEPARATOR / DIVIDERS
+   ============================================ */
+.separator-top {
+  border-top: 1px solid var(--ng-border) !important;
+}
+
+/* ============================================
+   CLOSE MASK
+   ============================================ */
+.closeMask {
+  background: rgba(7, 7, 16, 0.85) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* ============================================
+   SIDEBAR CLOSE BTN
+   ============================================ */
+.card-close,
+.cart-close,
+.sidebar-close {
+  color: var(--ng-text-secondary) !important;
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--ng-transition);
+}
+
+.card-close:hover,
+.cart-close:hover,
+.sidebar-close:hover {
+  border-color: var(--ng-neon-pink);
+  color: var(--ng-neon-pink) !important;
+  box-shadow: 0 0 10px rgba(255, 45, 120, 0.3);
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+@media (max-width: 992px) {
+  .axil-mainmenu {
+    padding: 10px 0 !important;
+  }
+
+  .main-slider-content .title {
+    font-size: 32px !important;
+  }
+
+  .section-title-wrapper .title {
+    font-size: 24px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .main-slider-content .title {
+    font-size: 26px !important;
+  }
+
+  .axil-signin-form-wrap {
+    padding: 20px !important;
+  }
+
+  .axil-signin-form {
+    padding: 24px !important;
+  }
+}
+
+/* ============================================
+   MOBILE NAV DARK THEME
+   ============================================ */
+.mainmenu-nav {
+  background: var(--ng-bg-primary) !important;
+}
+
+@media (max-width: 992px) {
+  .mainmenu-nav {
+    background: var(--ng-bg-card) !important;
+    border-right: 1px solid var(--ng-border) !important;
+  }
+
+  .mainmenu > li > a {
+    border-bottom: 1px solid var(--ng-border) !important;
+    padding: 14px 20px !important;
+  }
+
+  .axil-submenu {
+    background: var(--ng-bg-secondary) !important;
+    border-left: 2px solid var(--ng-neon-green) !important;
+    border-top: none !important;
+    margin-left: 16px;
+  }
+}
+
+/* ============================================
+   NEON GLITCH EFFECT FOR HEADINGS
+   ============================================ */
+.ng-glow-text {
+  text-shadow:
+    0 0 10px rgba(0, 255, 136, 0.5),
+    0 0 20px rgba(0, 255, 136, 0.3),
+    0 0 40px rgba(0, 255, 136, 0.1);
+}
+
+/* ============================================
+   GAMING BADGES
+   ============================================ */
+.ng-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-family: var(--ng-font-body) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+.ng-badge-hot {
+  background: rgba(255, 107, 53, 0.15);
+  border: 1px solid rgba(255, 107, 53, 0.4);
+  color: var(--ng-neon-orange) !important;
+}
+
+.ng-badge-new {
+  background: rgba(0, 255, 136, 0.15);
+  border: 1px solid rgba(0, 255, 136, 0.4);
+  color: var(--ng-neon-green) !important;
+}
+
+.ng-badge-sale {
+  background: rgba(255, 45, 120, 0.15);
+  border: 1px solid rgba(255, 45, 120, 0.4);
+  color: var(--ng-neon-pink) !important;
+}
+
+/* ============================================
+   GAMING HERO STATS
+   ============================================ */
+.ng-hero-stats {
+  display: flex;
+  gap: 32px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--ng-border);
+}
+
+.ng-stat-item {
+  text-align: center;
+}
+
+.ng-stat-number {
+  font-family: var(--ng-font-display) !important;
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  background: var(--ng-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+  line-height: 1;
+}
+
+.ng-stat-label {
+  font-family: var(--ng-font-body) !important;
+  font-size: 11px !important;
+  color: var(--ng-text-muted) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+  display: block;
+}
+
+/* ============================================
+   CATEGORY ICONS (SVG inline gaming icons)
+   ============================================ */
+.ng-cat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  font-size: 22px;
+  transition: all var(--ng-transition);
+}
+
+.categrie-product:hover .ng-cat-icon {
+  background: rgba(0, 255, 136, 0.15);
+  border-color: rgba(0, 255, 136, 0.5);
+  box-shadow: var(--ng-glow-green);
+}
+
+/* ============================================
+   FEATURED BANNER SECTION
+   ============================================ */
+.ng-featured-banner {
+  background: linear-gradient(135deg, var(--ng-bg-card), var(--ng-bg-secondary));
+  border: 1px solid var(--ng-border);
+  border-radius: var(--ng-radius-lg);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  margin: 40px 0;
+}
+
+.ng-featured-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.08) 0%, transparent 70%);
+}
+
+.ng-featured-banner .title {
+  font-size: 28px !important;
+  margin-bottom: 12px;
+}
+
+.ng-featured-banner p {
+  color: var(--ng-text-secondary) !important;
+  margin-bottom: 24px;
+}
+
+/* ============================================
+   NOTIFLIX OVERRIDES
+   ============================================ */
+.notiflix-notify-success {
+  background: var(--ng-bg-card) !important;
+  border-left: 4px solid var(--ng-neon-green) !important;
+}
+
+.notiflix-notify-failure {
+  background: var(--ng-bg-card) !important;
+  border-left: 4px solid var(--ng-neon-pink) !important;
+}
+
+.notiflix-loading-circle svg circle {
+  stroke: var(--ng-neon-green) !important;
+}
+
+/* ============================================
+   MISC OVERRIDES
+   ============================================ */
+.axil-shop-top .category-select {
+  background: transparent !important;
+}
+
+.axil-shop-top {
+  background: var(--ng-bg-secondary) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius) !important;
+  padding: 16px 20px !important;
+  margin-bottom: 24px !important;
+}
+
+.product-filter-mobile {
+  background: rgba(0, 255, 136, 0.1) !important;
+  border: 1px solid var(--ng-border) !important;
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-body) !important;
+  font-weight: 600 !important;
+  padding: 8px 16px;
+  border-radius: var(--ng-radius);
+}
+
+/* ============================================
+   CART ORDER SUMMARY (axil-order-summery)
+   ============================================ */
+.axil-order-summery {
+  background: var(--ng-bg-card) !important;
+  border: 1px solid var(--ng-border) !important;
+  border-radius: var(--ng-radius-lg) !important;
+  padding: 24px !important;
+}
+
+.axil-order-summery .title {
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 14px !important;
+  letter-spacing: 0.15em !important;
+  padding-bottom: 16px !important;
+  border-bottom: 1px solid var(--ng-border) !important;
+  margin-bottom: 16px !important;
+}
+
+.summery-table td {
+  background: transparent !important;
+  border-color: var(--ng-border) !important;
+  color: var(--ng-text-secondary) !important;
+  padding: 10px 0 !important;
+  font-family: var(--ng-font-body) !important;
+  font-size: 15px !important;
+}
+
+.order-total-amount {
+  color: var(--ng-neon-green) !important;
+  font-family: var(--ng-font-display) !important;
+  font-weight: 700 !important;
+}
+
+/* Product table heading */
+.product-table-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ng-border);
+}
+
+/* Breadcrumb */
+.axil-breadcrumb-area {
+  background: var(--ng-bg-secondary) !important;
+  border-bottom: 1px solid var(--ng-border) !important;
+  padding: 14px 0 !important;
+}
+
+.axil-breadcrumb {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.axil-breadcrumb-item a {
+  color: var(--ng-text-muted) !important;
+  font-size: 13px !important;
+  font-family: var(--ng-font-body) !important;
+}
+
+.axil-breadcrumb-item a:hover {
+  color: var(--ng-neon-green) !important;
+}
+
+.axil-breadcrumb-item.active {
+  color: var(--ng-neon-green) !important;
+  font-size: 13px;
+  font-family: var(--ng-font-body) !important;
+}
+
+.separator {
+  color: var(--ng-text-muted) !important;
+  font-size: 12px;
+}
+
+.separator::before {
+  content: '›';
+}
+
+/* Table overrides */
+table {
+  background: var(--ng-bg-secondary) !important;
+}
+
+table th {
+  background: var(--ng-bg-card) !important;
+  color: var(--ng-neon-green) !important;
+  border-color: var(--ng-border) !important;
+  font-family: var(--ng-font-display) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+table td {
+  border-color: var(--ng-border) !important;
+  color: var(--ng-text-primary) !important;
+  vertical-align: middle;
+}
+
+/* Mobile menu brand */
+.mobile-nav-brand img {
+  filter: brightness(1.2);
+}
+
+/* Download app buttons */
+.app-link a img {
+  filter: grayscale(60%) brightness(0.8);
+  transition: filter var(--ng-transition);
+  max-width: 130px;
+}
+
+.app-link a:hover img {
+  filter: grayscale(0%) brightness(1) drop-shadow(0 0 8px rgba(0, 255, 136, 0.3));
+}

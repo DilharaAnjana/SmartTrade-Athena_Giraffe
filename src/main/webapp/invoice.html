@@ -3,183 +3,403 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartTrade - Invoice</title>
+    <title>NeonGear | Invoice</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --ng-bg: #070710;
+            --ng-bg-card: #12121f;
+            --ng-bg-secondary: #0d0d1a;
+            --ng-green: #00ff88;
+            --ng-blue: #00b4ff;
+            --ng-border: rgba(0, 255, 136, 0.15);
+            --ng-text: #e8e8f0;
+            --ng-muted: #8888aa;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
-            background-color: #f5f6f8;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--ng-bg);
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--ng-text);
+            min-height: 100vh;
+        }
+
+        .invoice-topbar {
+            background: var(--ng-bg-secondary);
+            border-bottom: 1px solid var(--ng-border);
+            padding: 14px 0;
         }
 
         .invoice-card {
-            border: none;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
+            background: var(--ng-bg-card);
+            border: 1px solid var(--ng-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        .invoice-card-header {
+            background: linear-gradient(135deg, rgba(0,255,136,0.05), rgba(0,180,255,0.05));
+            border-bottom: 1px solid var(--ng-border);
+            padding: 32px;
+            position: relative;
+        }
+
+        .invoice-card-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ff88, #00b4ff);
         }
 
         .brand-logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: #0d6efd; /* Bootstrap Primary Blue */
+            font-family: 'Orbitron', monospace;
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            background: linear-gradient(135deg, #00ff88, #00b4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-decoration: none;
+            display: block;
+            line-height: 1;
         }
 
-        .brand-logo span {
-            color: #333;
+        .brand-sub {
+            font-size: 10px;
+            color: var(--ng-muted);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            font-family: 'Rajdhani', sans-serif;
+            margin-top: 4px;
+            display: block;
         }
 
-        .invoice-header {
-            border-bottom: 2px solid #e9ecef;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
+        .invoice-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            color: rgba(0,255,136,0.08);
+            text-transform: uppercase;
+            margin: 0;
         }
 
-        .table thead th {
-            background-color: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-            color: #495057;
+        .invoice-meta {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 14px;
+            color: var(--ng-muted);
+        }
+
+        .invoice-meta strong {
+            color: var(--ng-text);
+            font-weight: 600;
+        }
+
+        .invoice-body {
+            padding: 32px;
+        }
+
+        .address-block h6 {
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ng-green);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--ng-border);
+        }
+
+        .address-block address {
+            color: var(--ng-muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .address-block address strong {
+            color: var(--ng-text);
+            font-weight: 600;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+        }
+
+        .items-table thead th {
+            background: rgba(0,255,136,0.05) !important;
+            border-bottom: 2px solid var(--ng-green) !important;
+            color: var(--ng-green) !important;
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 12px 16px;
+        }
+
+        .items-table tbody tr {
+            border-bottom: 1px solid var(--ng-border);
+            transition: background 0.2s;
+        }
+
+        .items-table tbody tr:hover {
+            background: rgba(0, 255, 136, 0.03);
+        }
+
+        .items-table tbody td {
+            padding: 14px 16px;
+            font-size: 14px;
+            color: var(--ng-text);
         }
 
         .total-section {
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            padding: 15px;
+            background: rgba(0,255,136,0.04);
+            border: 1px solid var(--ng-border);
+            border-radius: 12px;
+            padding: 20px;
         }
 
-        .grand-total {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #0d6efd;
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 14px;
+            color: var(--ng-muted);
         }
 
-        /* Print Styles */
+        .total-row.grand {
+            border-top: 1px solid var(--ng-border);
+            margin-top: 8px;
+            padding-top: 16px;
+            font-family: 'Orbitron', monospace;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .total-row.grand span:last-child {
+            color: var(--ng-green);
+        }
+
+        .discount-amount {
+            color: #ff2d78 !important;
+        }
+
+        .invoice-footer {
+            border-top: 1px solid var(--ng-border);
+            padding: 20px 32px;
+            text-align: center;
+            color: var(--ng-muted);
+            font-size: 13px;
+        }
+
+        .badge-status {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: var(--ng-green);
+            font-family: 'Orbitron', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            padding: 4px 12px;
+            border-radius: 100px;
+        }
+
+        .btn-action {
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 10px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-print {
+            background: rgba(0,255,136,0.1);
+            border: 1px solid rgba(0,255,136,0.3);
+            color: #00ff88;
+        }
+
+        .btn-print:hover {
+            background: #00ff88;
+            color: #000;
+            box-shadow: 0 0 20px rgba(0,255,136,0.4);
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #00ff88, #00b4ff);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0,255,136,0.3);
+        }
+
+        .btn-download:hover {
+            box-shadow: 0 0 30px rgba(0,255,136,0.6);
+            transform: translateY(-2px);
+        }
+
         @media print {
-            body {
-                background-color: #fff;
-                -webkit-print-color-adjust: exact;
-            }
-
-            .invoice-card {
-                box-shadow: none;
-            }
-
-            .btn-print, .no-print {
-                display: none !important;
+            body { background: #fff !important; }
+            .no-print { display: none !important; }
+            .invoice-card { box-shadow: none !important; border: 1px solid #ddd !important; }
+            .invoice-topbar { display: none !important; }
+            :root {
+                --ng-bg-card: #fff;
+                --ng-border: #ddd;
+                --ng-green: #0d6efd;
+                --ng-text: #333;
+                --ng-muted: #666;
             }
         }
     </style>
-
 </head>
 <body>
-<div class="container py-5">
 
-    <div class="d-flex justify-content-end mb-3 no-print">
-        <button onclick="window.print()" class="btn btn-secondary me-2"><i class="fas fa-print"></i> Print</button>
-        <button class="btn btn-primary"><i class="fas fa-download"></i> Download PDF</button>
+<div class="invoice-topbar no-print">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="index.html" class="brand-logo" style="font-size:18px;">NEONGEAR</a>
+            <div class="d-flex gap-2">
+                <button onclick="window.print()" class="btn-action btn-print">
+                    <i class="fas fa-print me-1"></i> Print
+                </button>
+                <button class="btn-action btn-download">
+                    <i class="fas fa-download me-1"></i> Download PDF
+                </button>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="card invoice-card">
-        <div class="card-body p-5">
+<div class="container py-4">
+    <div class="invoice-card">
 
-            <div class="row invoice-header align-items-center">
-                <div class="col-md-6">
-                    <a href="#" class="brand-logo">Smart<span>Trade</span></a>
-                    <p class="text-muted mt-2 mb-0">Your Trusted E-commerce Partner</p>
+        <div class="invoice-card-header">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <a href="index.html" class="brand-logo">NEONGEAR</a>
+                    <span class="brand-sub">Gaming Components Store</span>
+                    <p class="mt-2 mb-0" style="color:var(--ng-muted);font-size:13px;">
+                        <i class="fas fa-map-marker-alt me-1" style="color:var(--ng-green);"></i>
+                        123 Tech Park, Colombo 03, Sri Lanka
+                    </p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <h2 class="fw-bold text-uppercase text-secondary opacity-25">Invoice</h2>
-                    <ul class="list-unstyled mb-0">
-                        <li><strong>Invoice No:</strong> <label id="invoice-no"></label></li>
-                        <li><strong>Date:</strong> <label id="invoice-date"></label></li>
-                        <li><strong>Status:</strong> <span class="badge bg-success" id="invoice-status"></span></li>
+                    <div class="invoice-title">Invoice</div>
+                    <ul class="list-unstyled mb-0 mt-2">
+                        <li class="invoice-meta"><strong>Invoice No:</strong> <label id="invoice-no"></label></li>
+                        <li class="invoice-meta"><strong>Date:</strong> <label id="invoice-date"></label></li>
+                        <li class="mt-2"><span class="badge-status" id="invoice-status">PROCESSING</span></li>
                     </ul>
                 </div>
             </div>
+        </div>
 
-            <div class="row mb-5">
-                <div class="col-md-6">
-                    <h5 class="fw-bold">From:</h5>
-                    <address class="text-secondary">
-                        <strong>SmartTrade Inc.</strong><br>
-                        123 Tech Park, 04th Lane<br>
-                        Colombo 03, Sri Lanka<br>
-                        Email: billing@smarttrade.lk<br>
-                        Phone: +94 11 234 5678
-                    </address>
+        <div class="invoice-body">
+
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div class="address-block">
+                        <h6>From</h6>
+                        <address>
+                            <strong>NeonGear Inc.</strong><br>
+                            123 Tech Park, 04th Lane<br>
+                            Colombo 03, Sri Lanka<br>
+                            <i class="fas fa-envelope me-1" style="color:var(--ng-green);"></i> billing@neongear.gg<br>
+                            <i class="fas fa-phone me-1" style="color:var(--ng-blue);"></i> +94 11 234 5678
+                        </address>
+                    </div>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <h5 class="fw-bold">Bill To:</h5>
-                    <address class="text-secondary">
-                        <strong id="buyer-name"></strong><br>
-                        <span id="buyer-address"></span>
-                        <br/>
-                        <span id="city-name"></span>, <span id="country-name"></span>
-                        <br/>
-                        <strong>Email: </strong><label id="buyer-email"></label>
-                    </address>
+                    <div class="address-block">
+                        <h6>Bill To</h6>
+                        <address>
+                            <strong id="buyer-name"></strong><br>
+                            <span id="buyer-address"></span><br>
+                            <span id="city-name"></span>, <span id="country-name"></span><br>
+                            <i class="fas fa-envelope me-1" style="color:var(--ng-green);"></i>
+                            <label id="buyer-email"></label>
+                        </address>
+                    </div>
                 </div>
             </div>
 
-            <div class="table-responsive mb-4">
-                <table class="table table-hover">
+            <div class="table-responsive">
+                <table class="items-table">
                     <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Item Description</th>
-                        <th scope="col" class="text-center">Quantity</th>
-                        <th scope="col" class="text-end">Unit Price</th>
-                        <th scope="col" class="text-end">Total</th>
+                        <th>#</th>
+                        <th>Item Description</th>
+                        <th class="text-center">Qty</th>
+                        <th class="text-end">Unit Price</th>
+                        <th class="text-end">Total</th>
                     </tr>
                     </thead>
-                    <tbody id="item-tbody">
-
-
-                    </tbody>
+                    <tbody id="item-tbody"></tbody>
                 </table>
             </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <p class="text-muted small">
-                        <strong>Note:</strong> Payment is due within 30 days. Please include the invoice number on your
-                        check. Thank you for your business!
-                    </p>
+            <div class="row mt-4">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div style="background:rgba(0,180,255,0.04);border:1px solid rgba(0,180,255,0.15);border-radius:12px;padding:16px;">
+                        <p style="color:var(--ng-muted);font-size:13px;margin:0;line-height:1.7;">
+                            <i class="fas fa-shield-alt me-1" style="color:var(--ng-blue);"></i>
+                            <strong style="color:var(--ng-text);">Secure Transaction</strong><br>
+                            All products come with manufacturer warranty. For returns or issues, contact support@neongear.gg within 30 days.
+                        </p>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="total-section ms-md-auto w-75">
-                        <div class="d-flex justify-content-between mb-2">
+                    <div class="total-section">
+                        <div class="total-row">
                             <span>Subtotal:</span>
-                            <span class="fw-bold">Rs. <span id="subtotal"></span></span>
+                            <span style="color:var(--ng-text);font-weight:600;">$<span id="subtotal"></span></span>
                         </div>
-                        <div class="d-flex justify-content-between mb-2 text-danger">
-                            <span>Discount (0%):</span>
-                            <span>Rs. <span id="discount-price">0</span></span>
+                        <div class="total-row">
+                            <span class="discount-amount">Discount:</span>
+                            <span class="discount-amount">-$<span id="discount-price">0.00</span></span>
                         </div>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span>Shipping Charges:</span>
-                            <span>Rs. <span id="shipping-charges"></span></span>
+                        <div class="total-row">
+                            <span>Shipping:</span>
+                            <span style="color:var(--ng-text);font-weight:600;">$<span id="shipping-charges"></span></span>
                         </div>
-                        <hr>
-                        <div class="d-flex justify-content-between grand-total">
+                        <div class="total-row grand">
                             <span>Total:</span>
-                            <span>Rs. <span id="total"></span></span>
+                            <span>$<span id="total"></span></span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center mt-5 text-muted small">
-                <p>&copy; 2026 SmartTrade. All rights reserved.</p>
-            </div>
-
         </div>
+
+        <div class="invoice-footer">
+            <p style="margin:0;">
+                <i class="fas fa-gamepad me-1" style="color:var(--ng-green);"></i>
+                Thank you for choosing <strong style="color:var(--ng-green);">NeonGear</strong>.
+                &copy; 2025 NeonGear Gaming Components. All rights reserved.
+            </p>
+        </div>
+
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <script src="assets/js/notiflix-aio-3.2.8.min.js"></script>
 <script src="assets/js/invoice.js"></script>
 </body>
