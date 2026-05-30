@@ -27,7 +27,7 @@ async function verifyAccount() {
             const data = await response.json();
             if (data.status) {
                 Notiflix.Report.success(
-                    'SmartTrade',
+                    'NeonGear',
                     data.message,
                     'Okay', // button title
                     () => {
